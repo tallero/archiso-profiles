@@ -1,0 +1,44 @@
+---
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+# NOTE: most functionality (apart from building) is abstracted by this include
+include:
+  - project: 'archlinux/ci-scripts'
+    ref: master
+    file: '/prepare_archiso_vm.yml'
+
+variables:
+  BUILD_SCRIPT: ./.gitlab/ci/build_archiso.sh
+  PACKAGE_LIST: cryptsetup dosfstools e2fsprogs erofs-utils git jq libisoburn mtools openssl qemu-headless squashfs-tools zsync
+  QEMU_BUILD_TIMEOUT: 2400
+  QEMU_COPY_ARTIFACTS_TIMEOUT: 120
+  QEMU_VM_MEMORY: 3072
+  ARCHISO_COW_SPACE_SIZE: 2g
+
+stages:
+  - check
+  - build
+
+check:
+  before_script:
+    - pacman --noconfirm -Syu --needed make shellcheck
+  script:
+    - make check
+  stage: check
+
+build_short:
+  extends: .build
+  parallel:
+    matrix:
+      - BUILD_SCRIPT_ARGS: encrypted bootstrap
+      - BUILD_SCRIPT_ARGS: encrypted bootstrap
+
+build_long:
+  extends: .build
+  parallel:
+    matrix:
+      - BUILD_SCRIPT_ARGS: encrypted iso
+      - BUILD_SCRIPT_ARGS: encrypted netboot
+  tags:
+    - fast-single-thread
