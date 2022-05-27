@@ -239,9 +239,12 @@ run_mkarchiso() {
   print_section_start "mkarchiso" "Running mkarchiso"
   git clone https://gitlab.archlinux.org/tallero/archiso archiso
   git -C archiso branch crypto
-  cd "${profile}"
-  bash build_repo.sh 
-  cd ..
+  useradd user
+  mkdir -p /home/user
+  cp -r "${profile}" /home/user
+  chown -R user /home/user
+  chmod -R 700 /home/user
+  su user -c "cd ${profile} && bash build_repo.sh"
   mkdir -p "${output}/" "${tmpdir}/"
   GNUPGHOME="${gnupg_homedir}" ./archiso/archiso/mkarchiso \
       -D "${install_dir}" \
