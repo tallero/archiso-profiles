@@ -14,6 +14,7 @@ _build_repo() {
     cd "${_server}"
     repo-add "${_profile}.any.db.tar.gz" *"any.pkg.tar."*
     cd "${_pwd}"
+    rm -rf repo
 }
 
 _build_repo
