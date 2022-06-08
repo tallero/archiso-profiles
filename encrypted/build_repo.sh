@@ -3,6 +3,7 @@
 _build_pkg() {
     local _pwd="$(pwd)"
     local _pkgname="${1}"
+    git clone "https://aur.archlinux.org/${_pkgname}"
     cd "${_pkgname}"
     makepkg
     mv "${_pkgname}"*".pkg.tar."* "${_server}"
