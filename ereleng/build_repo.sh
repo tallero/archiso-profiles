@@ -15,7 +15,7 @@ _build_pkg() {
 
 _build_repo() {
     local _profile
-    _profile=$(dirname ./)
+    _profile=$(basename $(pwd))
     local _server="/tmp/archiso-profiles/${_profile}"
     rm -rf repo "${_server}" && mkdir -p repo "${_server}"
     cd repo || exit
