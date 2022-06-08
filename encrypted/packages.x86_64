@@ -11,7 +11,7 @@ btrfs-progs
 clonezilla
 cloud-init
 crda
-cryptsetup
+cryptsetup-nested-cryptkey
 darkhttpd
 ddrescue
 dhclient
