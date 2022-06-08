@@ -1,9 +1,10 @@
 base
 cloud-init
+cryptsetup-nested-cryptkey
 hyperv
 linux
 mkinitcpio
-mkinitcpio-archiso
+mkinitcpio-archiso-encryption
 open-vm-tools
 openssh
 pv
