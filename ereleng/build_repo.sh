@@ -20,7 +20,7 @@ _build_repo() {
     cd repo || exit
     gpg --recv-keys "D9B0577BD93E98FC" # cryptsetup
     _build_pkg "cryptsetup-nested-cryptkey"
-    _build_pkg "mkinitcpio-archiso-encryption"
+    _build_pkg "mkinitcpio-archiso"
     cd ..
     rm -rf repo
 }
