@@ -23,14 +23,19 @@ build_short:
   extends: .build
   parallel:
     matrix:
-      - BUILD_SCRIPT_ARGS: keys bootstrap
-      - BUILD_SCRIPT_ARGS: keys bootstrap
+      - BUILD_SCRIPT_ARGS: ebaseline bootstrap
+      - BUILD_SCRIPT_ARGS: desktop bootstrap
+      - BUILD_SCRIPT_ARGS: ereleng bootstrap
 
 build_long:
   extends: .build
   parallel:
     matrix:
-      - BUILD_SCRIPT_ARGS: keys iso
-      - BUILD_SCRIPT_ARGS: keys netboot
+      - BUILD_SCRIPT_ARGS: ebaseline iso
+      - BUILD_SCRIPT_ARGS: desktop iso 
+      - BUILD_SCRIPT_ARGS: ereleng iso
+      - BUILD_SCRIPT_ARGS: ebaseline keys
+      - BUILD_SCRIPT_ARGS: desktop keys
+      - BUILD_SCRIPT_ARGS: ereleng keys
   tags:
     - fast-single-thread
