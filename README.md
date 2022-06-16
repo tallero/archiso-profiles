@@ -3,6 +3,16 @@
 This repository contain additional archiso profiles.
 It depends on `archiso-encryption`.
 
+### `desktop`
+Desktop profile.
+- `airootfs_image_type`:`erofs+luks`;
+- `keys_image_type`: `squashfs+luks`;
+- `buildmodes`:`iso` and `keys`;
+- `cryptsetup-luks-cryptkey` replaces `cryptsetup`;
+- `mkinitcpio-archiso` is replaced by `mkinitcpio-archiso-encryption`;
+- `encrypt` hook enabled.
+
+
 ### 'ereleng'
 
 Encryption-enabled replica of `releng`:
