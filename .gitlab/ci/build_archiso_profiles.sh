@@ -241,6 +241,9 @@ run_mkarchiso() {
   git -C archiso branch crypto
   useradd user
   mkdir -p /home/user
+  echo "Debug CI"
+  echo $(pwd)
+  ls
   cp -r "${profile}" /home/user
   chown -R user /home/user
   chmod -R 700 /home/user
