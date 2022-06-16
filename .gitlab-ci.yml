@@ -23,14 +23,14 @@ build_short:
   extends: .build
   parallel:
     matrix:
-      - BUILD_SCRIPT_ARGS: encrypted bootstrap
-      - BUILD_SCRIPT_ARGS: encrypted bootstrap
+      - BUILD_SCRIPT_ARGS: keys bootstrap
+      - BUILD_SCRIPT_ARGS: keys bootstrap
 
 build_long:
   extends: .build
   parallel:
     matrix:
-      - BUILD_SCRIPT_ARGS: encrypted iso
-      - BUILD_SCRIPT_ARGS: encrypted netboot
+      - BUILD_SCRIPT_ARGS: keys iso
+      - BUILD_SCRIPT_ARGS: keys netboot
   tags:
     - fast-single-thread
