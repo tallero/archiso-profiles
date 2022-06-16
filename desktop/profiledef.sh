@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 # shellcheck disable=SC2034
 
-iso_name="archlinux-ebaseline"
+iso_name="archlinux-desktop"
 iso_label="ARCH_$(date +%Y%m)"
 iso_publisher="Arch Linux <https://archlinux.org>"
-iso_application="Arch Linux baseline"
+iso_application="Arch Linux Desktop"
 iso_version="$(date +%Y.%m.%d)"
 install_dir="arch"
 buildmodes=('iso' 'keys')
