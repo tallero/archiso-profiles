@@ -1,0 +1,15 @@
+base
+cloud-init
+cryptsetup-nested-cryptkey
+hyperv
+gdm
+gnome-shell
+linux
+mkinitcpio
+mkinitcpio-archiso-encryption
+open-vm-tools
+openssh
+pv
+qemu-guest-agent
+syslinux
+virtualbox-guest-utils-nox
