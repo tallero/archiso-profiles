@@ -4,6 +4,8 @@ cryptsetup-nested-cryptkey
 hyperv
 gdm
 gnome-shell
+gnome-packagekit
+nautilus-terminal
 linux
 mkinitcpio
 mkinitcpio-archiso-encryption
