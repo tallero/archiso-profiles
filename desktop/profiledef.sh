@@ -19,9 +19,9 @@ pacman_conf="pacman.conf"
 airootfs_image_type="erofs+luks"
 airootfs_image_tool_options=('-zlz4hc,12')
 encryption_key="test.key"
-keys_image_type="squashfs+luks"
-keys_image_tool_options=('-comp' 'xz' '-Xbcj' 'x86'
-			 '-b' '1M' '-Xdict-size' '1M')
+keys_image_type="erofs+luks"
+keys_image_tool_options=('-zlz4hc,12')
+
 file_permissions=(
   ["/etc/shadow"]="0:0:400"
   ["/run/archiso/keys"]="0:0:700"
