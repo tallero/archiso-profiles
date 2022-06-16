@@ -13,7 +13,7 @@ Desktop profile.
 - `encrypt` hook enabled.
 
 
-### 'ereleng'
+### `ereleng`
 
 Encryption-enabled replica of `releng`:
 - `airootfs_image_type`: `squashfs+luks`;

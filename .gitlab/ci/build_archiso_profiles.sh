@@ -241,8 +241,9 @@ run_mkarchiso() {
   git -C archiso branch crypto
   useradd user
   mkdir -p /home/user
-  echo ${profile}
-  echo ${buildmode}
+  echo "Debug CI"
+  echo "profile: ${profile}"
+  echo "buildmode: ${buildmode}"
   echo "Debug CI"
   echo $(pwd)
   ls
