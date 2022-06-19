@@ -12,6 +12,7 @@ mkinitcpio
 mkinitcpio-archiso-encryption
 open-vm-tools
 openssh
+pavucontrol
 pv
 qemu-guest-agent
 syslinux
