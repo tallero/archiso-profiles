@@ -2,6 +2,7 @@ base
 cloud-init
 cryptsetup-nested-cryptkey
 hyperv
+firewalld
 gdm
 gnome-shell
 gnome-packagekit
