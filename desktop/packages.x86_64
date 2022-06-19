@@ -4,6 +4,7 @@ cryptsetup-nested-cryptkey
 hyperv
 firewalld
 gdm
+gnome-backgrounds
 gnome-shell
 gnome-packagekit
 nautilus-terminal
