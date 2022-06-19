@@ -251,8 +251,9 @@ run_mkarchiso() {
   chown -R user /home/user
   chmod -R 700 /home/user
   su user -c "cd ${profile} && bash build_repo.sh"
+  pacman -U /tmp/archiso-profiles/${profile}/archiso-encryption-git-*
   mkdir -p "${output}/" "${tmpdir}/"
-  GNUPGHOME="${gnupg_homedir}" ./archiso/archiso/mkarchiso \
+  GNUPGHOME="${gnupg_homedir}" mkarchiso \
       -D "${install_dir}" \
       -c "${codesigning_cert} ${codesigning_key}" \
       -g "${pgp_key_id}" \
