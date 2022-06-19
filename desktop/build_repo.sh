@@ -20,6 +20,7 @@ _build_repo() {
     rm -rf repo "${_server}" && mkdir -p repo "${_server}"
     cd repo || exit
     gpg --recv-keys "D9B0577BD93E98FC" # cryptsetup
+    _build_pkg "archiso-encryption-git"
     _build_pkg "cryptsetup-nested-cryptkey"
     _build_pkg "mkinitcpio-archiso-encryption"
     cd ..
