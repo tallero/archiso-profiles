@@ -19,7 +19,7 @@ pacman_conf="pacman.conf"
 airootfs_image_type="erofs+luks"
 airootfs_image_tool_options=('-zlz4hc,12')
 encryption_key="test.key"
-keys_image_type="squashfs+luks"
+keys_image_type="ext4+squashfs+luks"
 keys_image_tool_options=('-comp' 'xz' '-Xbcj' 'x86'
 			 '-b' '1M' '-Xdict-size' '1M')
 file_permissions=(
