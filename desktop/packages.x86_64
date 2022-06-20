@@ -22,6 +22,7 @@ mpv
 open-vm-tools
 openssh
 pavucontrol
+plymouth-nested-cryptkey
 pv
 qemu-guest-agent
 sushi

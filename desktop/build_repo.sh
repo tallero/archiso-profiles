@@ -23,6 +23,7 @@ _build_repo() {
     _build_pkg "archiso-encryption-git"
     _build_pkg "cryptsetup-nested-cryptkey"
     _build_pkg "mkinitcpio-archiso-encryption"
+    _build_pkg "plymouth-nested-cryptkey"
     cd ..
     rm -rf repo
 }
