@@ -2,6 +2,7 @@ abiword
 base
 cloud-init
 cryptsetup-nested-cryptkey
+evolution
 hyperv
 firewalld
 gnumeric
