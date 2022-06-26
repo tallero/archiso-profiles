@@ -10,7 +10,7 @@ include:
 
 variables:
   BUILD_SCRIPT: ./.gitlab/ci/build_archiso_profiles.sh
-  PACKAGE_LIST: base-devel cryptsetup dosfstools e2fsprogs erofs-utils git jq libisoburn mtools openssl qemu-headless shellcheck shfmt squashfs-tools zsync
+  PACKAGE_LIST: base-devel cryptsetup docbook-xsl dosfstools e2fsprogs erofs-utils git jq libisoburn mtools openssl pango qemu-headless shellcheck shfmt squashfs-tools zsync
   QEMU_BUILD_TIMEOUT: 2400
   QEMU_COPY_ARTIFACTS_TIMEOUT: 120
   QEMU_VM_MEMORY: 3072
