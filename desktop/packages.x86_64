@@ -14,6 +14,7 @@ gnome-packagekit
 gthumb
 inkscape
 firefox
+kdenlive
 nautilus-terminal
 linux
 mkinitcpio
@@ -25,6 +26,10 @@ pavucontrol
 plymouth-nested-cryptkey
 pv
 qemu-guest-agent
+seahorse
+seahorse-nautilus
 sushi
 syslinux
 virtualbox-guest-utils-nox
+youtube-dl
+zim
