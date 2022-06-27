@@ -1,5 +1,5 @@
 def install_deps():
-  !sudo apt install asciidoc bsdtar build-essential cmake dosfstools fakeroot libarchive-dev m4 make mtools git grub python-pip shellcheck >/dev/null 2>&1
+  !sudo apt install asciidoc bsdtar build-essential cmake dosfstools fakeroot libarchive-dev m4 make mtools git grub2 python-pip shellcheck squashfs-tools >/dev/null 2>&1
   !sudo pip install meson ninja >/dev/null 2>&1
 
 def install_arch_install_scripts():
@@ -46,6 +46,8 @@ def install_reflector():
   !su user -c "cd /home/user/reflector/trunk && makepkg"
 
 def build_releng():
+  !cp /usr/share/archiso/configs/releng/pacman.conf /etc
+  !stat /etc/pacman.conf
   !cd /usr/share/archiso/configs/releng && mkarchiso -v .
 
 def build_ereleng():
