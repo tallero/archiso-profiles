@@ -1,3 +1,6 @@
+#@title Build `releng`
+#@markdown Builds the archlinux install image.
+
 def install_deps():
   !sudo apt install autopoint asciidoc bsdtar build-essential cmake dosfstools fakeroot gnulib help2man intltool libarchive-dev libtool libzstd-dev m4 make mtools git grub2 python-pip shellcheck squashfs-tools texinfo zstd #>/dev/null 2>&1
   !sudo pip install meson ninja >/dev/null 2>&1
@@ -71,22 +74,22 @@ def install_autoconf():
   !cd autoconf && sudo DESTDIR="/" PREFIX="/usr" make install >/dev/null 2>&1
 
 def install_tar():
+  !apt-get build-dep tar >/dev/null 2>&1
   !wget https://ftp.gnu.org/gnu/tar/tar-1.34.tar.xz >/dev/null 2>&1
   !tar -xf tar-1.34.tar.xz >/dev/null 2>&1
   # !git clone https://git.savannah.gnu.org/git/tar.git
-  !apt-get build-dep tar >/dev/null 2>&1
   #!cd tar-1.34 && autoreconf -i
   !cd tar-1.34 && FORCE_UNSAFE_CONFIGURE=1 ./configure --prefix=/usr
   !cd tar-1.34 && make
   !cd tar-1.34 && DESTDIR=/ PREFIX=/usr make install
 
 def install_cmake():
-  !wget https://github.com/Kitware/CMake/releases/download/v3.23.2/cmake-3.23.2.tar.gz
+  # !rm -rf cmake-3.23.2
+  !wget https://github.com/Kitware/CMake/releases/download/v3.23.2/cmake-3.23.2.tar.gz >/dev/null 2>&1
   !tar xf cmake-3.23.2.tar.gz
-  !ls
-  !cd cmake-3.23.2 && ./configure --prefix=/usr
-  !cd cmake-3.23.2 && make
-  !cd cmake-3.23.2 && sudo DESTDIR="/" PREFIX="/usr" make install
+  !cd cmake-3.23.2 && ./configure --prefix=/usr >/dev/null 2>&1
+  !cd cmake-3.23.2 && make #>/dev/null 2>&1
+  !cd cmake-3.23.2 && sudo DESTDIR="/" PREFIX="/usr" make install #>/dev/null 2>&1
 
 def install_libarchive():
   !wget https://github.com/libarchive/libarchive/releases/download/v3.6.1/libarchive-3.6.1.tar.xz
@@ -105,6 +108,7 @@ def install_reflector():
   !cd reflector && install -Dm644 'reflector.conf' "/etc/xdg/reflector/reflector.conf"
 
 def build_releng():
+  # Ask on repository for this
   !sed "/SigLevel/d" archiso/configs/releng/pacman.conf > pacman.conf
   !cp pacman.conf /etc/pacman.conf
   !cp pacman.conf archiso/configs/releng/pacman.conf
@@ -113,7 +117,7 @@ def build_releng():
   !cd archiso/configs/releng && mkarchiso -v .
 
 def build_ereleng():
-  !asp checkout reflector
+  # Build an encrypted releng
   !rm -rf archiso-profiles >/dev/null 2>&1
   !git clone https://gitlab.archlinux.org/tallero/archiso-profiles >/dev/null 2>&1
   !useradd user >/dev/null 2>&1
@@ -121,18 +125,18 @@ def build_ereleng():
   !su user -c "cd archiso-profiles/ereleng && bash build_repo.sh"
   #!cd archiso-profiles/desktop && bash build_repo.sh
 
-#install_deps()
-#install_arch_install_scripts()
-#install_asp()
-#install_zstd()
-#install_gettext()
-#install_autoconf()
-#install_tar()
+install_deps()
+install_arch_install_scripts()
+install_asp()
+install_zstd()
+install_gettext()
+install_autoconf()
+install_tar()
 install_cmake()
-#install_libarchive()
-#install_pacman()
-#install_archiso()
-#install_reflector()
-#build_releng()
+install_libarchive()
+install_pacman()
+install_archiso()
+install_reflector()
+build_releng()
 #build_ereleng()
 
