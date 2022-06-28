@@ -3,8 +3,8 @@
 #@markdown The first run takes probably half an hour, so take a coffee and don't
 #@markdown close the page
 
-def install_deps():
-  !sudo apt install autopoint asciidoc bsdtar build-essential cmake dosfstools fakeroot git gnulib grub2 help2man intltool libtool libzstd-dev m4 make mtools python-pip shellcheck squashfs-tools texinfo zstd #>/dev/null 2>&1
+def install_packaged_deps():
+  !sudo apt install autopoint asciidoc bsdtar build-essential cmake dosfstools fakeroot flex git gnulib grub2 help2man intltool libgpgme11 libtool libzstd-dev m4 make mtools python-pip shellcheck squashfs-tools texinfo zstd #>/dev/null 2>&1
   !sudo pip install meson ninja >/dev/null 2>&1
 
 def install_arch_install_scripts():
@@ -18,15 +18,32 @@ def install_asp():
   !sudo make -C asp PREFIX=/usr DESTDIR="" install >/dev/null 2>&1
   !sudo install -Dm644 asp/LICENSE "/usr/share/licenses/asp/LICENSE" >/dev/null 2>&1
 
+def install_gpgme_error():
+  !rm -rf libgpg-error-1.45
+  !wget https://www.gnupg.org/ftp/gcrypt/libgpg-error/libgpg-error-1.45.tar.bz2
+  !tar xf libgpg-error-1.45.tar.bz2
+  !cd libgpg-error-1.45 && ./configure --prefix=/usr
+  !cd libgpg-error-1.45 && make
+  !cd libgpg-error-1.45 && DESTDIR="/" PREFIX="/usr" sudo make install
+
+def install_gpgme():
+  !rm -rf gpgme-1.17.1
+  !wget https://www.gnupg.org/ftp/gcrypt/gpgme/gpgme-1.17.1.tar.bz2
+  !tar xf gpgme-1.17.1.tar.bz2
+  !cd gpgme-1.17.1 && ./configure --help # | grep qt
+  !cd gpgme-1.17.1 && ./configure --prefix=/usr --disable-gpg-test --enable-languages="cl cpp" --disable-fd-passing --disable-static --disable-gpgsm-test
+  !cd gpgme-1.17.1 && CFLAGS+=' -Wno-int-conversion' && CXXFLAGS+=' -Wno-int-conversion' make
+  !cd gpgme-1.17.1 && DESTDIR="/" PREFIX="/usr" sudo make install
+
 def install_pacman():
   !rm -rf pacman
   !mkdir /etc/pacman.d
   !git clone https://gitlab.archlinux.org/tallero/archiso archiso >/dev/null 2>&1
   !git clone https://gitlab.archlinux.org/pacman/pacman >/dev/null 2>&1
   
-  !cd pacman && meson --prefix=/usr --buildtype=plain -Ddoc=disabled -Ddoxygen=disabled -Dscriptlet-shell=/usr/bin/bash -Dldconfig=/usr/bin/ldconfig build #>/dev/null 2>&1
-  !cd pacman && meson compile -C build >/dev/null 2>&1
-  !cd pacman && sudo DESTDIR="/" meson install -C build >/dev/null 2>&1
+  !cd pacman && meson --prefix=/usr --buildtype=plain -Dgpgme=enabled -Ddoc=disabled -Ddoxygen=disabled -Dscriptlet-shell=/usr/bin/bash -Dldconfig=/usr/bin/ldconfig build #>/dev/null 2>&1
+  !cd pacman && meson compile -C build #>/dev/null 2>&1
+  !cd pacman && sudo DESTDIR="/" meson install -C build #>/dev/null 2>&1
 
   # install Arch specific stuff
   !cd pacman && sudo install -dm755 "/etc" >/dev/null 2&1
@@ -34,8 +51,10 @@ def install_pacman():
   !cd pacman && sudo install -m644 "build/makepkg.conf" "/etc" >/dev/null 2>&1
 
   !echo "Server = https://geo.mirror.pkgbuild.com/\$repo/os/\$arch" > /etc/pacman.d/mirrorlist
-  !sudo sed '/SigLevel/d' archiso/configs/releng/pacman.conf > /etc/pacman.conf
-  !sudo pacman-key --init
+  #!sed "/SigLevel/d" archiso/configs/releng/pacman.conf > pacman.conf
+  !sudo cp archiso/configs/releng/pacman.conf /etc/pacman.conf
+  # !sudo sed '/SigLevel/d' archiso/configs/releng/pacman.conf > /etc/pacman.conf
+  !sudo pacman-key --init archlinux
   !sudo pacman -Sy
 
 def install_archiso():
@@ -100,6 +119,14 @@ def install_libarchive():
   !cd libarchive-3.6.1 && cmake --build build
   !cd libarchive-3.6.1 && DESTDIR="/" PREFIX="/usr" sudo cmake --install build
 
+def install_grub():
+  #!rm -rf grub-2.06
+  !wget https://ftp.gnu.org/gnu/grub/grub-2.06.tar.xz
+  !tar xf grub-2.06.tar.xz
+  !cd grub-2.06 && ./configure --prefix=/usr
+  !cd grub-2.06 && make
+  !cd grub-2.06 && DESTDIR="/" PREFIX="/usr" sudo make install
+
 def install_reflector():
   !rm -rf reflector
   !git clone https://gitlab.archlinux.org/tallero/reflector
@@ -112,12 +139,14 @@ def install_reflector():
 def build_releng():
   #@markdown Builds the archlinux install image.
   # TODO: why?
-  !sed "/SigLevel/d" archiso/configs/releng/pacman.conf > pacman.conf
-  !cp pacman.conf /etc/pacman.conf
-  !cp pacman.conf archiso/configs/releng/pacman.conf
+  #!sed "/SigLevel/d" archiso/configs/releng/pacman.conf > pacman.conf
+  #!cp pacman.conf /etc/pacman.conf
+  #!cp pacman.conf archiso/configs/releng/pacman.conf
+  #!cp pacman.conf /usr/share/archiso/configs/releng/pacman.conf
 
-  !cd archiso/configs/releng && rm -rf work out
+  #!cd archiso/configs/releng && rm -rf work out
   !cd archiso/configs/releng && mkarchiso -v .
+  !cat /etc/pacman.conf | grep SigLevel
 
 def build_ereleng():
   #@markdown Build an encrypted releng (encrypted).
@@ -128,18 +157,23 @@ def build_ereleng():
   !su user -c "cd archiso-profiles/ereleng && bash build_repo.sh"
   #!cd archiso-profiles/desktop && bash build_repo.sh
 
-install_deps()
-install_arch_install_scripts()
+def install_unpackaged_deps():
+  install_cmake()
+  install_arch_install_scripts()
+  install_gettext()
+  install_autoconf()
+  install_zstd()
+  install_libarchive()
+  install_gpgme_error()
+  install_gpgme()
+  install_pacman()
+  install_archiso()
+
+#install_packaged_deps()
+#install_unpackaged_deps()
 # install_asp()
-install_zstd()
-install_gettext()
-install_autoconf()
-install_tar()
-install_cmake()
-install_libarchive()
-install_pacman()
-install_archiso()
+install_grub()
 # install_reflector()
-build_releng()
+#build_releng()
 #build_ereleng()
 
