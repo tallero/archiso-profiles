@@ -1,9 +1,11 @@
+#!/usr/bin/env ipython
+
 #@title Build archiso profiles
 
 profile = "releng" #@param ["releng"]
-
-#@markdown The first run takes probably half an hour, so take a coffee and don't
-#@markdown close the page
+mirror = "geo.mirror.pkgbuild.com" #@param ["geo.mirror.pkgbuild.com"]
+#@markdown The whole process takes about an hour, so take a coffee, don't
+#@markdown close the page and be ready to prove you're not a robot.
 
 #@markdown **NOTE:** Down run this on your local Ubuntu, you will break it.
 
@@ -12,13 +14,14 @@ def install_packaged_deps():
   !sudo pip install meson ninja >/dev/null 2>&1
 
 def install_asp():
+  # !rm -rf asp
   !git clone https://github.com/falconindy/asp.git >/dev/null 2>&1
   !make -C asp >/dev/null 2&1
   !sudo make -C asp PREFIX=/usr DESTDIR="" install >/dev/null 2>&1
   !sudo install -Dm644 asp/LICENSE "/usr/share/licenses/asp/LICENSE" >/dev/null 2>&1
 
 def install_gpgme_error():
-  !rm -rf libgpg-error-1.45
+  # !rm -rf libgpg-error-1.45
   !wget https://www.gnupg.org/ftp/gcrypt/libgpg-error/libgpg-error-1.45.tar.bz2
   !tar xf libgpg-error-1.45.tar.bz2
   !cd libgpg-error-1.45 && ./configure --prefix=/usr
@@ -26,7 +29,7 @@ def install_gpgme_error():
   !cd libgpg-error-1.45 && DESTDIR="/" PREFIX="/usr" sudo make install
 
 def install_gpgme():
-  !rm -rf gpgme-1.17.1
+  # !rm -rf gpgme-1.17.1
   !wget https://www.gnupg.org/ftp/gcrypt/gpgme/gpgme-1.17.1.tar.bz2
   !tar xf gpgme-1.17.1.tar.bz2
   !cd gpgme-1.17.1 && ./configure --help # | grep qt
@@ -35,7 +38,7 @@ def install_gpgme():
   !cd gpgme-1.17.1 && DESTDIR="/" PREFIX="/usr" sudo make install
 
 def install_pacman():
-  !rm -rf pacman
+  # !rm -rf pacman
   !mkdir /etc/pacman.d
   !git clone https://gitlab.archlinux.org/tallero/archiso archiso >/dev/null 2>&1
   !git clone https://gitlab.archlinux.org/pacman/pacman >/dev/null 2>&1
@@ -54,28 +57,31 @@ def install_pacman():
   !sudo pacman -Sy
 
 def install_arch_install_scripts():
+  # !rm -rf archiso-install-scripts
   !git clone https://github.com/archlinux/arch-install-scripts >/dev/null 2>&1
   !make -C arch-install-scripts > /dev/null 2>&1
   !sudo make -C arch-install-scripts PREFIX=/usr DESTDIR="/" install > /dev/null 2>&1
 
 def install_archiso():
-  !rm -rf archiso
+  # !rm -rf archiso
   !git clone https://gitlab.archlinux.org/tallero/archiso archiso >/dev/null 2>&1
   !git checkout -C archiso -b crypto >/dev/null 2>&1
   !cd archiso && make -k check >/dev/null 2>&1
   !cd archiso && make DESTDIR="" PREFIX='/usr' install >/dev/null 2>&1
 
 def install_zstd():
-  !rm -rf zstd-1.5.2
+  # !rm -rf zstd-1.5.2
   !wget https://github.com/facebook/zstd/releases/download/v1.5.2/zstd-1.5.2.tar.gz >/dev/null 2>&1
   !tar -xf zstd-1.5.2.tar.gz
   !cd zstd-1.5.2 && sed '/build static library to build tests/d' -i build/cmake/CMakeLists.txt
   !cd zstd-1.5.2 && sed 's/libzstd_static/libzstd_shared/g' -i build/cmake/tests/CMakeLists.txt
-  !cd zstd-1.5.2 && CFLAGS+=' -ffat-lto-objects' && CXXFLAGS+=' -ffat-lto-objects' cmake -S build/cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=None -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_INSTALL_LIBDIR=/usr/lib -DZSTD_BUILD_CONTRIB=ON -DZSTD_BUILD_STATIC=ON -DZSTD_BUILD_TESTS=OFF -DZSTD_PROGRAMS_LINK_SHARED=ON && cmake --build build
-  !cd zstd-1.5.2 && DESTDIR="/" cmake --install build
+  !cd zstd-1.5.2 && CFLAGS+=' -ffat-lto-objects' CXXFLAGS+=' -ffat-lto-objects' cmake -S build/cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=None -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_INSTALL_LIBDIR=/usr/lib -DZSTD_BUILD_CONTRIB=ON -DZSTD_BUILD_STATIC=ON -DZSTD_BUILD_TESTS=OFF -DZSTD_PROGRAMS_LINK_SHARED=ON >/dev/null 2>&1
+  !cd zstd-1.5.2 && cmake --build build  >/dev/null 2>&1
+  !cd zstd-1.5.2 && DESTDIR="/" cmake --install build >/dev/null 2>&1
   !cd zstd-1.5.2 && ln -sf /usr/bin/zstd "/usr/bin/zstdmt"
 
 def install_gettext():
+  # !rm -rf gettext-0.21
   !wget https://ftp.gnu.org/gnu/gettext/gettext-0.21.tar.xz >/dev/null 2>&1
   !tar xf gettext-0.21.tar.xz >/dev/null 2>&1
   !cd gettext-0.21 && autoreconf -i >/dev/null 2>&1
@@ -91,31 +97,27 @@ def install_autoconf():
   !cd autoconf && sudo DESTDIR="/" PREFIX="/usr" make install >/dev/null 2>&1
 
 def install_tar():
-  # !apt-get build-dep tar >/dev/null 2>&1
   !wget https://ftp.gnu.org/gnu/tar/tar-1.34.tar.xz >/dev/null 2>&1
   !tar -xf tar-1.34.tar.xz >/dev/null 2>&1
-  # !git clone https://git.savannah.gnu.org/git/tar.git
-  #!cd tar-1.34 && autoreconf -i
-  !cd tar-1.34 && FORCE_UNSAFE_CONFIGURE=1 ./configure --prefix=/usr
-  !cd tar-1.34 && make
-  !cd tar-1.34 && DESTDIR=/ PREFIX=/usr make install
+  !cd tar-1.34 && FORCE_UNSAFE_CONFIGURE=1 ./configure --prefix=/usr >/dev/null 2>&1
+  !cd tar-1.34 && make >/dev/null 2>&1
+  !cd tar-1.34 && DESTDIR=/ PREFIX=/usr make install >/dev/null 2>&1
 
 def install_cmake():
   # !rm -rf cmake-3.23.2
   !wget https://github.com/Kitware/CMake/releases/download/v3.23.2/cmake-3.23.2.tar.gz >/dev/null 2>&1
   !tar xf cmake-3.23.2.tar.gz
   !cd cmake-3.23.2 && ./configure --prefix=/usr >/dev/null 2>&1
-  !cd cmake-3.23.2 && make #>/dev/null 2>&1
-  !cd cmake-3.23.2 && sudo DESTDIR="/" PREFIX="/usr" make install #>/dev/null 2>&1
+  !cd cmake-3.23.2 && make >/dev/null 2>&1
+  !cd cmake-3.23.2 && sudo DESTDIR="/" PREFIX="/usr" make install >/dev/null 2>&1
 
 def install_libarchive():
-  !rm -rf libarchive-3.6.1
+  # !rm -rf libarchive-3.6.1
   !wget https://github.com/libarchive/libarchive/releases/download/v3.6.1/libarchive-3.6.1.tar.xz
   !tar xf libarchive-3.6.1.tar.xz
-  !ls libarchive-3.6.1
-  !cd libarchive-3.6.1 && cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr
-  !cd libarchive-3.6.1 && cmake --build build
-  !cd libarchive-3.6.1 && DESTDIR="/" PREFIX="/usr" sudo cmake --install build
+  !cd libarchive-3.6.1 && cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr >/dev/null 2>&1
+  !cd libarchive-3.6.1 && cmake --build build >/dev/null 2>&1
+  !cd libarchive-3.6.1 && DESTDIR="/" PREFIX="/usr" sudo cmake --install build >/dev/null 2>&1
 
 def install_grub():
   !apt install libfuse-dev
@@ -139,6 +141,7 @@ def install_grub():
   !sed -e "s/%PKGVER%/2.06/" < "sbat.csv" > "/usr/share/grub/sbat.csv"
 
 def install_xorriso():
+  # !rm -rf libisofs libburn libisoburn
   !wget https://files.libburnia-project.org/releases/libisofs-1.5.4.tar.gz
   !tar xf libisofs-1.5.4.tar.gz
   !cd libisofs-1.5.4 && ./configure --prefix=/usr
@@ -156,7 +159,7 @@ def install_xorriso():
   !cd libisoburn-1.5.4 && DESTDIR="/" PREFIX="/usr" sudo make install
 
 def install_reflector():
-  !rm -rf reflector
+  # !rm -rf reflector
   !git clone https://gitlab.archlinux.org/tallero/reflector
   !cd reflector && python3 setup.py install --prefix=/usr --root="/" --optimize=1
   !cd reflector && install -Dm644 "man/reflector.1.gz" "/usr/share/man/man1/reflector.1.gz"
@@ -165,14 +168,11 @@ def install_reflector():
   !cd reflector && install -Dm644 'reflector.conf' "/etc/xdg/reflector/reflector.conf"
 
 def build_releng():
-  # Builds the archlinux install image.
-  #!cd archiso/configs/releng && rm -rf work out
+  !cd archiso/configs/releng && rm -rf work out
   !cd archiso/configs/releng && mkarchiso -v .
-  !cat /etc/pacman.conf | grep SigLevel
 
 def build_ereleng():
-  # Build an encrypted releng (encrypted).
-  !rm -rf archiso-profiles >/dev/null 2>&1
+  # !rm -rf archiso-profiles >/dev/null 2>&1
   !git clone https://gitlab.archlinux.org/tallero/archiso-profiles >/dev/null 2>&1
   !useradd user >/dev/null 2>&1
   !chown -R user:user archiso-profiles /tmp
