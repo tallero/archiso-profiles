@@ -30,9 +30,9 @@ def install_cmake():
   !apt remove cmake >/dev/null 2>&1
   !wget https://github.com/Kitware/CMake/releases/download/v3.23.2/cmake-3.23.2.tar.gz >/dev/null 2>&1
   !tar xf cmake-3.23.2.tar.gz
-  !cd cmake-3.23.2 && ./configure --prefix=/usr #>/dev/null 2>&1
-  !cd cmake-3.23.2 && make #>/dev/null 2>&1
-  !cd cmake-3.23.2 && sudo make install #>/dev/null 2>&1
+  !cd cmake-3.23.2 && ./configure --prefix=/usr >/dev/null 2>&1
+  !cd cmake-3.23.2 && make >/dev/null 2>&1
+  !cd cmake-3.23.2 && sudo make install >/dev/null 2>&1
 
 def install_ntph():
   print("install ntph")
@@ -56,9 +56,9 @@ def install_gpg():
   !apt install libksba-dev libgnutls28-dev
   !wget https://gnupg.org/ftp/gcrypt/gnupg/gnupg-2.3.6.tar.bz2 >/dev/null 2>&1
   !tar xf gnupg-2.3.6.tar.bz2
-  !cd gnupg-2.3.6 && ./configure --prefix=/usr --disable-gpg-test # >/dev/null 2>&1
-  !cd gnupg-2.3.6 && make # >/dev/null 2>&1
-  !cd gnupg-2.3.6 && sudo make install # >/dev/null 2>&1
+  !cd gnupg-2.3.6 && ./configure --prefix=/usr --disable-gpg-test >/dev/null 2>&1
+  !cd gnupg-2.3.6 && make >/dev/null 2>&1
+  !cd gnupg-2.3.6 && sudo make install >/dev/null 2>&1
 
 def install_libassuan():
   print("install libassuan")
@@ -75,9 +75,9 @@ def install_gpgme_error():
   #!apt install libassuan-dev
   !wget https://www.gnupg.org/ftp/gcrypt/libgpg-error/libgpg-error-1.31.tar.bz2 >/dev/null 2>&1
   !tar xf libgpg-error-1.31.tar.bz2
-  !cd libgpg-error-1.31 && ./configure --prefix=/usr #>/dev/null 2>&1
-  !cd libgpg-error-1.31 && make #>/dev/null 2>&1
-  !cd libgpg-error-1.31 && sudo make install # >/dev/null 2>&1
+  !cd libgpg-error-1.31 && ./configure --prefix=/usr >/dev/null 2>&1
+  !cd libgpg-error-1.31 && make >/dev/null 2>&1
+  !cd libgpg-error-1.31 && sudo make install >/dev/null 2>&1
   !mv /usr/lib/libgpg-error* /usr/lib/x86_64-linux-gnu
 
 def install_gpgme():
@@ -124,9 +124,9 @@ def install_libarchive():
   !tar xf libarchive-3.6.1.tar.xz
   !cd libarchive-3.6.1 && cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr >/dev/null 2>&1
   print("build")
-  !cd libarchive-3.6.1 && cmake --build build #>/dev/null 2>&1
+  !cd libarchive-3.6.1 && cmake --build build >/dev/null 2>&1
   print("install")
-  !cd libarchive-3.6.1 && sudo cmake --install build #>/dev/null 2>&1
+  !cd libarchive-3.6.1 && sudo cmake --install build >/dev/null 2>&1
 
 def install_pacman():
   print("install pacman")
@@ -163,7 +163,7 @@ def install_archiso():
 
 def install_grub():
   print("install grub-pc")
-  !apt install libfuse-dev
+  !apt install libfuse-dev >/dev/null 2>&1
   !rm -rf grub-2.06
   !wget https://ftp.gnu.org/gnu/grub/grub-2.06.tar.xz >/dev/null 2>&1
   !tar xf grub-2.06.tar.xz
@@ -188,21 +188,21 @@ def install_grub():
 def install_xorriso():
   print("install xorriso")
   # !rm -rf libisofs libburn libisoburn
-  !wget https://files.libburnia-project.org/releases/libisofs-1.5.4.tar.gz
+  !wget https://files.libburnia-project.org/releases/libisofs-1.5.4.tar.gz >/dev/null 2>&1
   !tar xf libisofs-1.5.4.tar.gz
-  !cd libisofs-1.5.4 && ./configure --prefix=/usr
-  !cd libisofs-1.5.4 && make
-  !cd libisofs-1.5.4 && DESTDIR="/" sudo make install
-  !wget https://files.libburnia-project.org/releases/libburn-1.5.4.tar.gz
+  !cd libisofs-1.5.4 && ./configure --prefix=/usr >/dev/null 2>&1
+  !cd libisofs-1.5.4 && make >/dev/null 2>&1
+  !cd libisofs-1.5.4 && DESTDIR="/" sudo make install >/dev/null 2>&1
+  !wget https://files.libburnia-project.org/releases/libburn-1.5.4.tar.gz >/dev/null 2>&1
   !tar xf libburn-1.5.4.tar.gz
-  !cd libburn-1.5.4 && ./configure --prefix=/usr
-  !cd libburn-1.5.4 && make
-  !cd libburn-1.5.4 && DESTDIR="/" sudo make install
+  !cd libburn-1.5.4 && ./configure --prefix=/usr >/dev/null 2>&1
+  !cd libburn-1.5.4 && make >/dev/null 2>&1
+  !cd libburn-1.5.4 && DESTDIR="/" sudo make install >/dev/null 2>&1
   !wget https://files.libburnia-project.org/releases/libisoburn-1.5.4.tar.gz
   !tar xf libisoburn-1.5.4.tar.gz
-  !cd libisoburn-1.5.4 && ./configure --prefix=/usr
-  !cd libisoburn-1.5.4 && make
-  !cd libisoburn-1.5.4 && DESTDIR="/" sudo make install
+  !cd libisoburn-1.5.4 && ./configure --prefix=/usr >/dev/null 2>&1
+  !cd libisoburn-1.5.4 && make >/dev/null 2>&1
+  !cd libisoburn-1.5.4 && DESTDIR="/" sudo make install >/dev/null 2>&1
 
 def install_asp():
   # !rm -rf asp
@@ -234,23 +234,23 @@ def build_ereleng():
   #!cd archiso-profiles/desktop && bash build_repo.sh
 
 def install_unpackaged_deps():
-  #install_gettext()
-  #install_autoconf()
-  #install_cmake()
-  #install_zstd()
-  #install_tar()
-  #install_libarchive()
-  #install_gcrypt()
-  #install_ntph()
-  #install_gpg()
-  #install_libassuan()
-  #install_gpgme_error()
-  #install_gpgme()
-  #install_arch_install_scripts()
+  install_gettext()
+  install_autoconf()
+  install_cmake()
+  install_zstd()
+  install_tar()
+  install_libarchive()
+  install_gcrypt()
+  install_ntph()
+  install_gpg()
+  install_libassuan()
+  install_gpgme_error()
+  install_gpgme()
+  install_arch_install_scripts()
   install_pacman()
-  #install_grub()
-  #install_xorriso()
-  #install_archiso()
+  install_grub()
+  install_xorriso()
+  install_archiso()
 
 def install_utilities():
   install_asp()
