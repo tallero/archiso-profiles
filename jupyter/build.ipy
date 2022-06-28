@@ -21,9 +21,10 @@ def install_gpgme_error():
 
 def install_gpgme():
   # !rm -rf gpgme-1.17.1
+  !apt install libassuan-dev
   !wget https://www.gnupg.org/ftp/gcrypt/gpgme/gpgme-1.17.1.tar.bz2
   !tar xf gpgme-1.17.1.tar.bz2
-  !cd gpgme-1.17.1 && ./configure --help # | grep qt
+  #!cd gpgme-1.17.1 && ./configure --help # | grep qt
   !cd gpgme-1.17.1 && ./configure --prefix=/usr --disable-gpg-test --enable-languages="cl cpp" --disable-fd-passing --disable-static --disable-gpgsm-test
   !cd gpgme-1.17.1 && CFLAGS+=' -Wno-int-conversion' && CXXFLAGS+=' -Wno-int-conversion' make
   !cd gpgme-1.17.1 && DESTDIR="/" PREFIX="/usr" sudo make install
@@ -191,3 +192,4 @@ def install_utilities():
 install_packaged_deps()
 install_unpackaged_deps()
 #build_ereleng()
+
