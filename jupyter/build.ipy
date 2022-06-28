@@ -1,14 +1,5 @@
 #!/usr/bin/env ipython
 
-#@title Build archiso profiles
-
-profile = "releng" #@param ["releng"]
-mirror = "geo.mirror.pkgbuild.com" #@param ["geo.mirror.pkgbuild.com"]
-#@markdown The whole process takes about an hour, so take a coffee, don't
-#@markdown close the page and be ready to prove you're not a robot.
-
-#@markdown **NOTE:** Down run this on your local Ubuntu, you will break it.
-
 def install_packaged_deps():
   !sudo apt install autopoint asciidoc bsdtar build-essential cmake dosfstools fakeroot flex git gnulib grub2 help2man intltool libgpgme11 libtool libzstd-dev m4 make mtools python-pip shellcheck squashfs-tools texinfo xorriso zstd #>/dev/null 2>&1
   !sudo pip install meson ninja >/dev/null 2>&1
@@ -199,6 +190,4 @@ def install_utilities():
 
 install_packaged_deps()
 install_unpackaged_deps()
-build_releng()
 #build_ereleng()
-
