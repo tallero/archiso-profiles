@@ -8,13 +8,8 @@ profile = "releng" #@param ["releng"]
 #@markdown **NOTE:** Down run this on your local Ubuntu, you will break it.
 
 def install_packaged_deps():
-  !sudo apt install autopoint asciidoc bsdtar build-essential cmake dosfstools fakeroot flex git gnulib grub2 help2man intltool libgpgme11 libtool libzstd-dev m4 make mtools python-pip shellcheck squashfs-tools texinfo zstd #>/dev/null 2>&1
+  !sudo apt install autopoint asciidoc bsdtar build-essential cmake dosfstools fakeroot flex git gnulib grub2 help2man intltool libgpgme11 libtool libzstd-dev m4 make mtools python-pip shellcheck squashfs-tools texinfo xorriso zstd #>/dev/null 2>&1
   !sudo pip install meson ninja >/dev/null 2>&1
-
-def install_arch_install_scripts():
-  !git clone https://github.com/archlinux/arch-install-scripts >/dev/null 2>&1
-  !make -C arch-install-scripts > /dev/null 2>&1
-  !sudo make -C arch-install-scripts PREFIX=/usr DESTDIR="/" install > /dev/null 2>&1
 
 def install_asp():
   !git clone https://github.com/falconindy/asp.git >/dev/null 2>&1
@@ -45,21 +40,23 @@ def install_pacman():
   !git clone https://gitlab.archlinux.org/tallero/archiso archiso >/dev/null 2>&1
   !git clone https://gitlab.archlinux.org/pacman/pacman >/dev/null 2>&1
   
-  !cd pacman && meson --prefix=/usr --buildtype=plain -Dgpgme=enabled -Ddoc=disabled -Ddoxygen=disabled -Dscriptlet-shell=/usr/bin/bash -Dldconfig=/usr/bin/ldconfig build #>/dev/null 2>&1
-  !cd pacman && meson compile -C build #>/dev/null 2>&1
-  !cd pacman && sudo DESTDIR="/" meson install -C build #>/dev/null 2>&1
+  !cd pacman && meson --prefix=/usr --buildtype=plain -Dgpgme=enabled -Ddoc=disabled -Ddoxygen=disabled -Dscriptlet-shell=/usr/bin/bash -Dldconfig=/usr/bin/ldconfig build >/dev/null 2>&1
+  !cd pacman && meson compile -C build >/dev/null 2>&1
+  !cd pacman && sudo DESTDIR="/" meson install -C build >/dev/null 2>&1
 
-  # install Arch specific stuff
   !cd pacman && sudo install -dm755 "/etc" >/dev/null 2&1
   !cd pacman && sudo install -m644 "build/pacman.conf" "/etc" >/dev/null 2>&1
   !cd pacman && sudo install -m644 "build/makepkg.conf" "/etc" >/dev/null 2>&1
 
   !echo "Server = https://geo.mirror.pkgbuild.com/\$repo/os/\$arch" > /etc/pacman.d/mirrorlist
-  #!sed "/SigLevel/d" archiso/configs/releng/pacman.conf > pacman.conf
   !sudo cp archiso/configs/releng/pacman.conf /etc/pacman.conf
-  # !sudo sed '/SigLevel/d' archiso/configs/releng/pacman.conf > /etc/pacman.conf
   !sudo pacman-key --init archlinux
   !sudo pacman -Sy
+
+def install_arch_install_scripts():
+  !git clone https://github.com/archlinux/arch-install-scripts >/dev/null 2>&1
+  !make -C arch-install-scripts > /dev/null 2>&1
+  !sudo make -C arch-install-scripts PREFIX=/usr DESTDIR="/" install > /dev/null 2>&1
 
 def install_archiso():
   !rm -rf archiso
@@ -141,6 +138,23 @@ def install_grub():
   !wget https://raw.githubusercontent.com/archlinux/svntogit-packages/packages/grub/trunk/sbat.csv
   !sed -e "s/%PKGVER%/2.06/" < "sbat.csv" > "/usr/share/grub/sbat.csv"
 
+def install_xorriso():
+  !wget https://files.libburnia-project.org/releases/libisofs-1.5.4.tar.gz
+  !tar xf libisofs-1.5.4.tar.gz
+  !cd libisofs-1.5.4 && ./configure --prefix=/usr
+  !cd libisofs-1.5.4 && make
+  !cd libisofs-1.5.4 && DESTDIR="/" PREFIX="/usr" sudo make install
+  !wget https://files.libburnia-project.org/releases/libburn-1.5.4.tar.gz
+  !tar xf libburn-1.5.4.tar.gz
+  !cd libburn-1.5.4 && ./configure --prefix=/usr
+  !cd libburn-1.5.4 && make
+  !cd libburn-1.5.4 && DESTDIR="/" PREFIX="/usr" sudo make install
+  !wget https://files.libburnia-project.org/releases/libisoburn-1.5.4.tar.gz
+  !tar xf libisoburn-1.5.4.tar.gz
+  !cd libisoburn-1.5.4 && ./configure --prefix=/usr
+  !cd libisoburn-1.5.4 && make
+  !cd libisoburn-1.5.4 && DESTDIR="/" PREFIX="/usr" sudo make install
+
 def install_reflector():
   !rm -rf reflector
   !git clone https://gitlab.archlinux.org/tallero/reflector
@@ -166,16 +180,17 @@ def build_ereleng():
   #!cd archiso-profiles/desktop && bash build_repo.sh
 
 def install_unpackaged_deps():
-  install_cmake()
-  install_arch_install_scripts()
   install_gettext()
   install_autoconf()
+  install_cmake()
   install_zstd()
   install_libarchive()
   install_gpgme_error()
   install_gpgme()
+  install_arch_install_scripts()
   install_pacman()
   install_grub()
+  install_xorriso()
   install_archiso()
 
 def install_utilities():
