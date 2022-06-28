@@ -1,18 +1,66 @@
 #!/usr/bin/env ipython
 
 def install_packaged_deps():
-  !apt install autopoint asciidoc bsdtar build-essential cmake dosfstools fakeroot flex git gnulib grub2 help2man intltool libgpgme11 libtool libzstd-dev m4 make mtools python-pip shellcheck squashfs-tools texinfo xorriso zstd >/dev/null 2>&1
+  !apt install autopoint asciidoc bsdtar build-essential dosfstools fakeroot flex git gnulib gnutls-bin help2man intltool libgpgme11 libtool libzstd-dev m4 make mtools python-pip shellcheck squashfs-tools texinfo xorriso zstd >/dev/null 2>&1
   !pip install meson ninja >/dev/null 2>&1
 
-def install_asp():
-  # !rm -rf asp
-  !git clone https://github.com/falconindy/asp.git >/dev/null 2>&1
-  !make -C asp >/dev/null 2&1
-  !sudo make -C asp PREFIX=/usr DESTDIR="" install >/dev/null 2>&1
-  !sudo install -Dm644 asp/LICENSE "/usr/share/licenses/asp/LICENSE" >/dev/null 2>&1
+def install_gettext():
+  # !rm -rf gettext-0.21
+  !wget https://ftp.gnu.org/gnu/gettext/gettext-0.21.tar.xz >/dev/null 2>&1
+  !tar xf gettext-0.21.tar.xz >/dev/null 2>&1
+  !cd gettext-0.21 && autoreconf -i >/dev/null 2>&1
+  !cd gettext-0.21 && ./configure --prefix=/usr >/dev/null 2>&1
+  !cd gettext-0.21 && make >/dev/null 2>&1
+  !cd gettext-0.21 && sudo DISTDIR="/" make install >/dev/null 2>&1
+
+def install_autoconf():
+  !git clone https://git.savannah.gnu.org/git/autoconf.git autoconf-git >/dev/null 2>&1
+  !cd autoconf-git && autoreconf -i >/dev/null 2>&1
+  !cd autoconf-git && ./configure --prefix=/usr >/dev/null 2>&1
+  !cd autoconf-git && make >/dev/null 2>&1
+  !cd autoconf-git && sudo DESTDIR="/" PREFIX="/usr" make install >/dev/null 2>&1
+
+def install_cmake():
+  # !rm -rf cmake-3.23.2
+  !wget https://github.com/Kitware/CMake/releases/download/v3.23.2/cmake-3.23.2.tar.gz >/dev/null 2>&1
+  !tar xf cmake-3.23.2.tar.gz
+  !cd cmake-3.23.2 && ./configure --prefix=/usr >/dev/null 2>&1
+  !cd cmake-3.23.2 && make >/dev/null 2>&1
+  !cd cmake-3.23.2 && sudo DESTDIR="/" PREFIX="/usr" make install >/dev/null 2>&1
+
+def install_ntph():
+  !wget https://gnupg.org/ftp/gcrypt/npth/npth-1.6.tar.bz2 >/dev/null 2>&1
+  !tar xf npth-1.6.tar.bz2
+  !cd npth-1.6 && ./configure --prefix=/usr
+  !cd npth-1.6 && make
+  !cd npth-1.6 && DESTDIR="/" PREFIX="/usr" sudo make install
+
+def install_gcrypt():
+  !wget https://www.gnupg.org/ftp/gcrypt/libgcrypt/libgcrypt-1.10.1.tar.bz2 >/dev/null 2>&1
+  !tar xf libgcrypt-1.10.1.tar.bz2
+  !cd libgcrypt-1.10.1 && ./configure --prefix=/usr
+  !cd libgcrypt-1.10.1 && make
+  !cd libgcrypt-1.10.1 && DESTDIR="/" PREFIX="/usr" sudo make install
+
+def install_gpg():
+  !apt install libksba-dev libgnutls28-dev
+  !wget https://gnupg.org/ftp/gcrypt/gnupg/gnupg-2.2.9.tar.bz2 >/dev/null 2>&1
+  !tar xf gnupg-2.2.9.tar.bz2
+  !cd gnupg-2.2.9 && ./configure --prefix=/usr
+  !cd gnupg-2.2.9 && make
+  !cd gnupg-2.2.9 && DESTDIR="/" PREFIX="/usr" sudo make install
+
+def install_libassuan():
+  # !rm -rf libassuan-2.5.5
+  !wget https://gnupg.org/ftp/gcrypt/libassuan/libassuan-2.5.5.tar.bz2
+  !tar xf libassuan-2.5.5.tar.bz2
+  !cd libassuan-2.5.5 && ./configure --prefix=/usr --disable-static
+  !cd libassuan-2.5.5 && make
+  !cd libassuan-2.5.5 && DESTDIR="/" PREFIX="/usr" sudo make install
 
 def install_gpgme_error():
   # !rm -rf libgpg-error-1.45
+  !apt install libassuan-dev
   !wget https://www.gnupg.org/ftp/gcrypt/libgpg-error/libgpg-error-1.45.tar.bz2
   !tar xf libgpg-error-1.45.tar.bz2
   !cd libgpg-error-1.45 && ./configure --prefix=/usr
@@ -20,14 +68,40 @@ def install_gpgme_error():
   !cd libgpg-error-1.45 && DESTDIR="/" PREFIX="/usr" sudo make install
 
 def install_gpgme():
-  # !rm -rf gpgme-1.17.1
-  !apt install libassuan-dev
+  #!apt install libgpgme-dev
+  !rm -rf gpgme-1.17.1
   !wget https://www.gnupg.org/ftp/gcrypt/gpgme/gpgme-1.17.1.tar.bz2
   !tar xf gpgme-1.17.1.tar.bz2
-  #!cd gpgme-1.17.1 && ./configure --help # | grep qt
-  !cd gpgme-1.17.1 && ./configure --prefix=/usr --disable-gpg-test --enable-languages="cl cpp" --disable-fd-passing --disable-static --disable-gpgsm-test
-  !cd gpgme-1.17.1 && CFLAGS+=' -Wno-int-conversion' && CXXFLAGS+=' -Wno-int-conversion' make
-  !cd gpgme-1.17.1 && DESTDIR="/" PREFIX="/usr" sudo make install
+  !cd gpgme-1.17.1 && ./configure --prefix=/usr --disable-gpg-test --enable-languages="cl cpp" --disable-fd-passing --disable-gpgsm-test # >/dev/null 2>&1
+  !cd gpgme-1.17.1 && CFLAGS="-Wno-implicit-function-declaration -Wno-int-conversion -Wno-unused-value -Wno-return-type" make # >/dev/null 2>&1
+  !cd gpgme-1.17.1 && DESTDIR="/" PREFIX="/usr" sudo make install # >/dev/null 2>&1
+
+def install_zstd():
+  # !rm -rf zstd-1.5.2
+  !wget https://github.com/facebook/zstd/releases/download/v1.5.2/zstd-1.5.2.tar.gz >/dev/null 2>&1
+  !tar -xf zstd-1.5.2.tar.gz
+  !cd zstd-1.5.2 && sed '/build static library to build tests/d' -i build/cmake/CMakeLists.txt
+  !cd zstd-1.5.2 && sed 's/libzstd_static/libzstd_shared/g' -i build/cmake/tests/CMakeLists.txt
+  !cd zstd-1.5.2 && CFLAGS+=' -ffat-lto-objects' CXXFLAGS+=' -ffat-lto-objects' cmake -S build/cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=None -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_INSTALL_LIBDIR=/usr/lib -DZSTD_BUILD_CONTRIB=ON -DZSTD_BUILD_STATIC=ON -DZSTD_BUILD_TESTS=OFF -DZSTD_PROGRAMS_LINK_SHARED=ON >/dev/null 2>&1
+  !cd zstd-1.5.2 && cmake --build build  >/dev/null 2>&1
+  !cd zstd-1.5.2 && DESTDIR="/" cmake --install build >/dev/null 2>&1
+  !cd zstd-1.5.2 && ln -sf /usr/bin/zstd "/usr/bin/zstdmt"
+
+def install_tar():
+  # !rm -rf tar-1.34
+  !wget https://ftp.gnu.org/gnu/tar/tar-1.34.tar.xz >/dev/null 2>&1
+  !tar -xf tar-1.34.tar.xz >/dev/null 2>&1
+  !cd tar-1.34 && FORCE_UNSAFE_CONFIGURE=1 ./configure --prefix=/usr >/dev/null 2>&1
+  !cd tar-1.34 && make >/dev/null 2>&1
+  !cd tar-1.34 && DESTDIR=/ PREFIX=/usr make install >/dev/null 2>&1
+
+def install_libarchive():
+  # !rm -rf libarchive-3.6.1
+  !wget https://github.com/libarchive/libarchive/releases/download/v3.6.1/libarchive-3.6.1.tar.xz >/dev/null 2>&1
+  !tar xf libarchive-3.6.1.tar.xz
+  !cd libarchive-3.6.1 && cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr >/dev/null 2>&1
+  !cd libarchive-3.6.1 && cmake --build build #>/dev/null 2>&1
+  !cd libarchive-3.6.1 && DESTDIR="/" PREFIX="/usr" sudo cmake --install build #>/dev/null 2>&1
 
 def install_pacman():
   # !rm -rf pacman
@@ -50,66 +124,16 @@ def install_pacman():
 
 def install_arch_install_scripts():
   # !rm -rf archiso-install-scripts
-  !git clone https://github.com/archlinux/arch-install-scripts >/dev/null 2>&1
+  !git clone https://github.com/archlinux/arch-install-scripts arch-install-scripts-git >/dev/null 2>&1
   !make -C arch-install-scripts > /dev/null 2>&1
   !sudo make -C arch-install-scripts PREFIX=/usr DESTDIR="/" install > /dev/null 2>&1
 
 def install_archiso():
   # !rm -rf archiso
-  !git clone https://gitlab.archlinux.org/tallero/archiso archiso >/dev/null 2>&1
+  !git clone https://gitlab.archlinux.org/tallero/archiso archiso-encryption >/dev/null 2>&1
   !git checkout -C archiso -b crypto >/dev/null 2>&1
-  !cd archiso && make -k check >/dev/null 2>&1
-  !cd archiso && make DESTDIR="" PREFIX='/usr' install >/dev/null 2>&1
-
-def install_zstd():
-  # !rm -rf zstd-1.5.2
-  !wget https://github.com/facebook/zstd/releases/download/v1.5.2/zstd-1.5.2.tar.gz >/dev/null 2>&1
-  !tar -xf zstd-1.5.2.tar.gz
-  !cd zstd-1.5.2 && sed '/build static library to build tests/d' -i build/cmake/CMakeLists.txt
-  !cd zstd-1.5.2 && sed 's/libzstd_static/libzstd_shared/g' -i build/cmake/tests/CMakeLists.txt
-  !cd zstd-1.5.2 && CFLAGS+=' -ffat-lto-objects' CXXFLAGS+=' -ffat-lto-objects' cmake -S build/cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=None -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_INSTALL_LIBDIR=/usr/lib -DZSTD_BUILD_CONTRIB=ON -DZSTD_BUILD_STATIC=ON -DZSTD_BUILD_TESTS=OFF -DZSTD_PROGRAMS_LINK_SHARED=ON >/dev/null 2>&1
-  !cd zstd-1.5.2 && cmake --build build  >/dev/null 2>&1
-  !cd zstd-1.5.2 && DESTDIR="/" cmake --install build >/dev/null 2>&1
-  !cd zstd-1.5.2 && ln -sf /usr/bin/zstd "/usr/bin/zstdmt"
-
-def install_gettext():
-  # !rm -rf gettext-0.21
-  !wget https://ftp.gnu.org/gnu/gettext/gettext-0.21.tar.xz >/dev/null 2>&1
-  !tar xf gettext-0.21.tar.xz >/dev/null 2>&1
-  !cd gettext-0.21 && autoreconf -i >/dev/null 2>&1
-  !cd gettext-0.21 && ./configure --prefix=/usr >/dev/null 2>&1
-  !cd gettext-0.21 && make >/dev/null 2>&1
-  !cd gettext-0.21 && sudo DISTDIR="/" make install >/dev/null 2>&1
-
-def install_autoconf():
-  !git clone https://git.savannah.gnu.org/git/autoconf.git >/dev/null 2>&1
-  !cd autoconf && autoreconf -i >/dev/null 2>&1
-  !cd autoconf && ./configure --prefix=/usr >/dev/null 2>&1
-  !cd autoconf && make >/dev/null 2>&1
-  !cd autoconf && sudo DESTDIR="/" PREFIX="/usr" make install >/dev/null 2>&1
-
-def install_tar():
-  !wget https://ftp.gnu.org/gnu/tar/tar-1.34.tar.xz >/dev/null 2>&1
-  !tar -xf tar-1.34.tar.xz >/dev/null 2>&1
-  !cd tar-1.34 && FORCE_UNSAFE_CONFIGURE=1 ./configure --prefix=/usr >/dev/null 2>&1
-  !cd tar-1.34 && make >/dev/null 2>&1
-  !cd tar-1.34 && DESTDIR=/ PREFIX=/usr make install >/dev/null 2>&1
-
-def install_cmake():
-  # !rm -rf cmake-3.23.2
-  !wget https://github.com/Kitware/CMake/releases/download/v3.23.2/cmake-3.23.2.tar.gz >/dev/null 2>&1
-  !tar xf cmake-3.23.2.tar.gz
-  !cd cmake-3.23.2 && ./configure --prefix=/usr >/dev/null 2>&1
-  !cd cmake-3.23.2 && make >/dev/null 2>&1
-  !cd cmake-3.23.2 && sudo DESTDIR="/" PREFIX="/usr" make install >/dev/null 2>&1
-
-def install_libarchive():
-  # !rm -rf libarchive-3.6.1
-  !wget https://github.com/libarchive/libarchive/releases/download/v3.6.1/libarchive-3.6.1.tar.xz
-  !tar xf libarchive-3.6.1.tar.xz
-  !cd libarchive-3.6.1 && cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr >/dev/null 2>&1
-  !cd libarchive-3.6.1 && cmake --build build >/dev/null 2>&1
-  !cd libarchive-3.6.1 && DESTDIR="/" PREFIX="/usr" sudo cmake --install build >/dev/null 2>&1
+  !cd archiso-encryption && make -k check >/dev/null 2>&1
+  !cd archiso-encryption && make DESTDIR="" PREFIX='/usr' install >/dev/null 2>&1
 
 def install_grub():
   !apt install libfuse-dev
@@ -150,6 +174,13 @@ def install_xorriso():
   !cd libisoburn-1.5.4 && make
   !cd libisoburn-1.5.4 && DESTDIR="/" PREFIX="/usr" sudo make install
 
+def install_asp():
+  # !rm -rf asp
+  !git clone https://github.com/falconindy/asp.git >/dev/null 2>&1
+  !make -C asp >/dev/null 2&1
+  !sudo make -C asp PREFIX=/usr DESTDIR="" install >/dev/null 2>&1
+  !sudo install -Dm644 asp/LICENSE "/usr/share/licenses/asp/LICENSE" >/dev/null 2>&1
+
 def install_reflector():
   # !rm -rf reflector
   !git clone https://gitlab.archlinux.org/tallero/reflector
@@ -172,24 +203,29 @@ def build_ereleng():
   #!cd archiso-profiles/desktop && bash build_repo.sh
 
 def install_unpackaged_deps():
-  install_gettext()
-  install_autoconf()
-  install_cmake()
-  install_zstd()
-  install_libarchive()
-  install_gpgme_error()
-  install_gpgme()
-  install_arch_install_scripts()
-  install_pacman()
-  install_grub()
-  install_xorriso()
-  install_archiso()
+  #install_gettext()
+  #install_autoconf()
+  #install_cmake()
+  #install_zstd()
+  #install_tar()
+  #install_libarchive()
+  #install_gcrypt()
+  #install_ntph()
+  install_gpg()
+  #install_libassuan()
+  #install_gpgme_error()
+  #install_gpgme()
+  #install_arch_install_scripts()
+  #install_pacman()
+  #install_grub()
+  #install_xorriso()
+  #install_archiso()
 
 def install_utilities():
   install_asp()
   install_reflector()
 
-install_packaged_deps()
+#install_packaged_deps()
 install_unpackaged_deps()
 #build_ereleng()
 
