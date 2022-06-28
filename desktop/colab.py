@@ -1,7 +1,11 @@
-#@title Build `releng`
-#@markdown Down run this on your local Ubuntu, you will break it.
+#@title Build archiso profiles
+
+profile = "releng" #@param ["releng"]
+
 #@markdown The first run takes probably half an hour, so take a coffee and don't
 #@markdown close the page
+
+#@markdown **NOTE:** Down run this on your local Ubuntu, you will break it.
 
 def install_packaged_deps():
   !sudo apt install autopoint asciidoc bsdtar build-essential cmake dosfstools fakeroot flex git gnulib grub2 help2man intltool libgpgme11 libtool libzstd-dev m4 make mtools python-pip shellcheck squashfs-tools texinfo zstd #>/dev/null 2>&1
@@ -66,16 +70,13 @@ def install_archiso():
 
 def install_zstd():
   !rm -rf zstd-1.5.2
-  !wget https://github.com/facebook/zstd/releases/download/v1.5.2/zstd-1.5.2.tar.gz
+  !wget https://github.com/facebook/zstd/releases/download/v1.5.2/zstd-1.5.2.tar.gz >/dev/null 2>&1
   !tar -xf zstd-1.5.2.tar.gz
   !cd zstd-1.5.2 && sed '/build static library to build tests/d' -i build/cmake/CMakeLists.txt
   !cd zstd-1.5.2 && sed 's/libzstd_static/libzstd_shared/g' -i build/cmake/tests/CMakeLists.txt
   !cd zstd-1.5.2 && CFLAGS+=' -ffat-lto-objects' && CXXFLAGS+=' -ffat-lto-objects' cmake -S build/cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=None -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_INSTALL_LIBDIR=/usr/lib -DZSTD_BUILD_CONTRIB=ON -DZSTD_BUILD_STATIC=ON -DZSTD_BUILD_TESTS=OFF -DZSTD_PROGRAMS_LINK_SHARED=ON && cmake --build build
   !cd zstd-1.5.2 && DESTDIR="/" cmake --install build
-  #!cd zstd-1.5.2 && ln -sf /usr/bin/zstd "/usr/bin/zstdmt"
-  #!cd zstd-1.5.2 && make >/dev/null 2>&1
-  #!cd zstd-1.5.2 && sudo DESTDIR="/" PREFIX="/usr" make install >/dev/null 2>&1
-  #!cp -r "/content/zstd/lib" /usr
+  !cd zstd-1.5.2 && ln -sf /usr/bin/zstd "/usr/bin/zstdmt"
 
 def install_gettext():
   !wget https://ftp.gnu.org/gnu/gettext/gettext-0.21.tar.xz >/dev/null 2>&1
@@ -120,12 +121,25 @@ def install_libarchive():
   !cd libarchive-3.6.1 && DESTDIR="/" PREFIX="/usr" sudo cmake --install build
 
 def install_grub():
-  #!rm -rf grub-2.06
-  !wget https://ftp.gnu.org/gnu/grub/grub-2.06.tar.xz
+  !apt install libfuse-dev
+  !rm -rf grub-2.06
+  !wget https://ftp.gnu.org/gnu/grub/grub-2.06.tar.xz >/dev/null 2>&1
   !tar xf grub-2.06.tar.xz
-  !cd grub-2.06 && ./configure --prefix=/usr
-  !cd grub-2.06 && make
-  !cd grub-2.06 && DESTDIR="/" PREFIX="/usr" sudo make install
+  !cd grub-2.06 && ./configure --prefix=/usr --with-platform="pc" --target i386 --enable-efiemu	--enable-mm-debug --enable-nls --enable-device-mapper --enable-cache-stats --enable-grub-mkfont --enable-grub-mount --prefix="/usr" --bindir="/usr/bin" --sbindir="/usr/bin" --mandir="/usr/share/man" --infodir="/usr/share/info" --datarootdir="/usr/share" --sysconfdir="/etc" --program-prefix="" --with-bootdir="/boot" --with-grubdir="grub" --disable-silent-rules --disable-werror >/dev/null 2>&1
+  !cd grub-2.06 && make >/dev/null 2>&1
+  !cd grub-2.06 && DESTDIR="/" PREFIX="/usr" sudo make install >/dev/null 2>&1
+  !rm -rf grub-2.06
+  !tar xf grub-2.06.tar.xz >/dev/null 2>&1
+  !cd grub-2.06 && ./configure --prefix=/usr --with-platform="efi" --target i386	--enable-mm-debug --enable-nls --enable-device-mapper --enable-cache-stats --enable-grub-mkfont --enable-grub-mount --prefix="/usr" --bindir="/usr/bin" --sbindir="/usr/bin" --mandir="/usr/share/man" --infodir="/usr/share/info" --datarootdir="/usr/share" --sysconfdir="/etc" --program-prefix="" --with-bootdir="/boot" --with-grubdir="grub" --disable-silent-rules --disable-werror >/dev/null 2>&1
+  !cd grub-2.06 && make >/dev/null 2>&1
+  !cd grub-2.06 && DESTDIR="/" PREFIX="/usr" sudo make install >/dev/null 2>&1
+  !rm -rf grub-2.06
+  !tar xf grub-2.06.tar.xz
+  !cd grub-2.06 && ./configure --prefix=/usr --with-platform="efi" --target x86_64	--enable-mm-debug --enable-nls --enable-device-mapper --enable-cache-stats --enable-grub-mkfont --enable-grub-mount --prefix="/usr" --bindir="/usr/bin" --sbindir="/usr/bin" --mandir="/usr/share/man" --infodir="/usr/share/info" --datarootdir="/usr/share" --sysconfdir="/etc" --program-prefix="" --with-bootdir="/boot" --with-grubdir="grub" --disable-silent-rules --disable-werror >/dev/null 2>&1
+  !cd grub-2.06 && make >/dev/null 2>&1
+  !cd grub-2.06 && DESTDIR="/" PREFIX="/usr" sudo make install >/dev/null 2>&1
+  !wget https://raw.githubusercontent.com/archlinux/svntogit-packages/packages/grub/trunk/sbat.csv
+  !sed -e "s/%PKGVER%/2.06/" < "sbat.csv" > "/usr/share/grub/sbat.csv"
 
 def install_reflector():
   !rm -rf reflector
@@ -137,19 +151,13 @@ def install_reflector():
   !cd reflector && install -Dm644 'reflector.conf' "/etc/xdg/reflector/reflector.conf"
 
 def build_releng():
-  #@markdown Builds the archlinux install image.
-  # TODO: why?
-  #!sed "/SigLevel/d" archiso/configs/releng/pacman.conf > pacman.conf
-  #!cp pacman.conf /etc/pacman.conf
-  #!cp pacman.conf archiso/configs/releng/pacman.conf
-  #!cp pacman.conf /usr/share/archiso/configs/releng/pacman.conf
-
+  # Builds the archlinux install image.
   #!cd archiso/configs/releng && rm -rf work out
   !cd archiso/configs/releng && mkarchiso -v .
   !cat /etc/pacman.conf | grep SigLevel
 
 def build_ereleng():
-  #@markdown Build an encrypted releng (encrypted).
+  # Build an encrypted releng (encrypted).
   !rm -rf archiso-profiles >/dev/null 2>&1
   !git clone https://gitlab.archlinux.org/tallero/archiso-profiles >/dev/null 2>&1
   !useradd user >/dev/null 2>&1
@@ -167,13 +175,15 @@ def install_unpackaged_deps():
   install_gpgme_error()
   install_gpgme()
   install_pacman()
+  install_grub()
   install_archiso()
 
-#install_packaged_deps()
-#install_unpackaged_deps()
-# install_asp()
-install_grub()
-# install_reflector()
-#build_releng()
+def install_utilities():
+  install_asp()
+  install_reflector()
+
+install_packaged_deps()
+install_unpackaged_deps()
+build_releng()
 #build_ereleng()
 
