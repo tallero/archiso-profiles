@@ -42,3 +42,7 @@ A GNOME based profile equipped with the basics.
 
 The profiles can be built on
 [Google Colab](https://colab.research.google.com/github/tallero/archiso-profiles/blob/noapps/jupyter/jupyter.ipynb).
+
+# License
+
+All the code is released under AGPLv3.
