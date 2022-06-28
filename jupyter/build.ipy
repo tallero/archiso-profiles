@@ -1,8 +1,8 @@
 #!/usr/bin/env ipython
 
 def install_packaged_deps():
-  !sudo apt install autopoint asciidoc bsdtar build-essential cmake dosfstools fakeroot flex git gnulib grub2 help2man intltool libgpgme11 libtool libzstd-dev m4 make mtools python-pip shellcheck squashfs-tools texinfo xorriso zstd #>/dev/null 2>&1
-  !sudo pip install meson ninja >/dev/null 2>&1
+  !apt install autopoint asciidoc bsdtar build-essential cmake dosfstools fakeroot flex git gnulib grub2 help2man intltool libgpgme11 libtool libzstd-dev m4 make mtools python-pip shellcheck squashfs-tools texinfo xorriso zstd >/dev/null 2>&1
+  !pip install meson ninja >/dev/null 2>&1
 
 def install_asp():
   # !rm -rf asp
