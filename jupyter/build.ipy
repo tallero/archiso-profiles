@@ -259,7 +259,11 @@ def install_utilities():
   install_asp()
   install_reflector()
 
-install_packaged_deps()
-install_unpackaged_deps()
+def install_deps():
+  print("setting up building environment")
+  install_packaged_deps()
+  install_unpackaged_deps()
+
+install_deps()
 #build_ereleng()
 
