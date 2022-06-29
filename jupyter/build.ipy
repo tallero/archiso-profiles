@@ -46,9 +46,9 @@ def install_gcrypt():
   print("install gcrypt")
   !wget https://www.gnupg.org/ftp/gcrypt/libgcrypt/libgcrypt-1.10.1.tar.bz2 >/dev/null 2>&1
   !tar xf libgcrypt-1.10.1.tar.bz2
-  !cd libgcrypt-1.10.1 && ./configure --prefix=/usr
-  !cd libgcrypt-1.10.1 && make
-  !cd libgcrypt-1.10.1 && sudo make install
+  !cd libgcrypt-1.10.1 && ./configure --prefix=/usr >/dev/null 2>&1
+  !cd libgcrypt-1.10.1 && make >/dev/null 2>&1
+  !cd libgcrypt-1.10.1 && sudo make install >/dev/null 2>&1
 
 def install_gpg():
   print("install gpg")
@@ -63,7 +63,7 @@ def install_gpg():
 def install_libassuan():
   print("install libassuan")
   !rm -rf libassuan-2.5.5
-  !wget https://gnupg.org/ftp/gcrypt/libassuan/libassuan-2.5.5.tar.bz2
+  !wget https://gnupg.org/ftp/gcrypt/libassuan/libassuan-2.5.5.tar.bz2 >/dev/null 2>&1
   !tar xf libassuan-2.5.5.tar.bz2
   !cd libassuan-2.5.5 && ./configure --prefix=/usr >/dev/null 2>&1
   !cd libassuan-2.5.5 && make >/dev/null 2>&1
@@ -110,6 +110,7 @@ def install_zstd():
   !cd zstd-1.5.2 && ln -sf /usr/bin/zstd "/usr/bin/zstdmt"
 
 def install_tar():
+  print("install tar")
   # !rm -rf tar-1.34
   !wget https://ftp.gnu.org/gnu/tar/tar-1.34.tar.xz >/dev/null 2>&1
   !tar -xf tar-1.34.tar.xz >/dev/null 2>&1
@@ -135,9 +136,9 @@ def install_pacman():
   !git clone https://gitlab.archlinux.org/tallero/archiso archiso >/dev/null 2>&1
   !git clone https://gitlab.archlinux.org/pacman/pacman >/dev/null 2>&1
   
-  !cd pacman && meson --prefix=/usr --buildtype=plain -Dgpgme=enabled -Ddoc=disabled -Ddoxygen=disabled -Dscriptlet-shell=/usr/bin/bash -Dldconfig=/usr/bin/ldconfig build #>/dev/null 2>&1
-  !cd pacman && meson compile -C build #>/dev/null 2>&1
-  !cd pacman && sudo DESTDIR="/" meson install -C build #>/dev/null 2>&1
+  !cd pacman && meson --prefix=/usr --buildtype=plain -Dgpgme=enabled -Ddoc=disabled -Ddoxygen=disabled -Dscriptlet-shell=/usr/bin/bash -Dldconfig=/usr/bin/ldconfig build >/dev/null 2>&1
+  !cd pacman && meson compile -C build >/dev/null 2>&1
+  !cd pacman && sudo DESTDIR="/" meson install -C build >/dev/null 2>&1
 
   !cd pacman && sudo install -dm755 "/etc" >/dev/null 2&1
   !cd pacman && sudo install -m644 "build/pacman.conf" "/etc" >/dev/null 2>&1
@@ -149,12 +150,14 @@ def install_pacman():
   !sudo pacman -Sy
 
 def install_arch_install_scripts():
+  print("install archiso-install-scripts")
   # !rm -rf archiso-install-scripts
   !git clone https://github.com/archlinux/arch-install-scripts arch-install-scripts-git >/dev/null 2>&1
   !make -C arch-install-scripts > /dev/null 2>&1
   !sudo make -C arch-install-scripts PREFIX=/usr DESTDIR="/" install > /dev/null 2>&1
 
 def install_archiso():
+  print("install archiso")
   # !rm -rf archiso
   !git clone https://gitlab.archlinux.org/tallero/archiso archiso-encryption >/dev/null 2>&1
   !git checkout -C archiso -b crypto >/dev/null 2>&1
