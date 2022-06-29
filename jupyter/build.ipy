@@ -76,10 +76,10 @@ def install_gpgme_error():
   !apt remove libgpg-error-dev >/dev/null 2>&1
   !wget https://www.gnupg.org/ftp/gcrypt/libgpg-error/libgpg-error-1.31.tar.bz2 >/dev/null 2>&1
   !tar xf libgpg-error-1.31.tar.bz2
-  !cd libgpg-error-1.31 && ./configure --prefix=/usr >/dev/null 2>&1
-  !cd libgpg-error-1.31 && make >/dev/null 2>&1
-  !cd libgpg-error-1.31 && sudo make install >/dev/null 2>&1
-  !cp /usr/lib/libgpg-error* /usr/lib/x86_64-linux-gnu
+  !cd libgpg-error-1.31 && ./configure --prefix=/usr #>/dev/null 2>&1
+  !cd libgpg-error-1.31 && make #>/dev/null 2>&1
+  !cd libgpg-error-1.31 && sudo make install #>/dev/null 2>&1
+  !cp -r /usr/lib/libgpg-error* /usr/lib/x86_64-linux-gnu
 
 def install_gpgme():
   print("install gpgme 1.13.1")
