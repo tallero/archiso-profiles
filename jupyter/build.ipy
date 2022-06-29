@@ -3,7 +3,7 @@
 def install_packaged_deps():
   !apt update >/dev/null 2>&1
   !apt remove libgl1 >/dev/null 2>&1 && apt autoremove >/dev/null 2>&1
-  !apt install autopoint asciidoc bsdtar build-essential dosfstools fakeroot flex git gnulib gnutls-bin help2man intltool libgpgme11 libtool m4 make mtools python-pip shellcheck squashfs-tools texinfo xorriso zstd >/dev/null 2>&1
+  !apt install autopoint asciidoc bsdtar build-essential dosfstools fakeroot flex git gnulib gnutls-bin help2man intltool libgpgme11 libtool m4 make meson mtools python-pip shellcheck squashfs-tools texinfo xorriso zstd >/dev/null 2>&1
   !pip install --upgrade --force meson ninja >/dev/null 2>&1
 
 def install_gettext():
@@ -65,9 +65,9 @@ def install_libassuan():
   !rm -rf libassuan-2.5.5
   !wget https://gnupg.org/ftp/gcrypt/libassuan/libassuan-2.5.5.tar.bz2
   !tar xf libassuan-2.5.5.tar.bz2
-  !cd libassuan-2.5.5 && ./configure --prefix=/usr # --disable-static
-  !cd libassuan-2.5.5 && make
-  !cd libassuan-2.5.5 && sudo make install
+  !cd libassuan-2.5.5 && ./configure --prefix=/usr >/dev/null 2>&1
+  !cd libassuan-2.5.5 && make >/dev/null 2>&1
+  !cd libassuan-2.5.5 && sudo make install >/dev/null 2>&1
 
 def install_gpgme_error():
   print("install gpgme-error")
@@ -78,7 +78,7 @@ def install_gpgme_error():
   !cd libgpg-error-1.31 && ./configure --prefix=/usr >/dev/null 2>&1
   !cd libgpg-error-1.31 && make >/dev/null 2>&1
   !cd libgpg-error-1.31 && sudo make install >/dev/null 2>&1
-  !mv /usr/lib/libgpg-error* /usr/lib/x86_64-linux-gnu
+  !cp /usr/lib/libgpg-error* /usr/lib/x86_64-linux-gnu
 
 def install_gpgme():
   print("install gpgme 1.13.1")
@@ -135,9 +135,9 @@ def install_pacman():
   !git clone https://gitlab.archlinux.org/tallero/archiso archiso >/dev/null 2>&1
   !git clone https://gitlab.archlinux.org/pacman/pacman >/dev/null 2>&1
   
-  !cd pacman && meson --prefix=/usr --buildtype=plain -Dgpgme=enabled -Ddoc=disabled -Ddoxygen=disabled -Dscriptlet-shell=/usr/bin/bash -Dldconfig=/usr/bin/ldconfig build >/dev/null 2>&1
-  !cd pacman && meson compile -C build >/dev/null 2>&1
-  !cd pacman && sudo DESTDIR="/" meson install -C build >/dev/null 2>&1
+  !cd pacman && meson --prefix=/usr --buildtype=plain -Dgpgme=enabled -Ddoc=disabled -Ddoxygen=disabled -Dscriptlet-shell=/usr/bin/bash -Dldconfig=/usr/bin/ldconfig build #>/dev/null 2>&1
+  !cd pacman && meson compile -C build #>/dev/null 2>&1
+  !cd pacman && sudo DESTDIR="/" meson install -C build #>/dev/null 2>&1
 
   !cd pacman && sudo install -dm755 "/etc" >/dev/null 2&1
   !cd pacman && sudo install -m644 "build/pacman.conf" "/etc" >/dev/null 2>&1
@@ -173,7 +173,7 @@ def install_grub():
   print("install grub-efi-pc")
   !rm -rf grub-2.06
   !tar xf grub-2.06.tar.xz >/dev/null 2>&1
-  !cd grub-2.06 && ./configure --prefix=/usr --with-platform="efi" --target i386	--enable-mm-debug --enable-nls --enable-device-mapper --enable-cache-stats --enable-grub-mkfont --enable-grub-mount --prefix="/usr" --bindir="/usr/bin" --sbindir="/usr/bin" --mandir="/usr/share/man" --infodir="/usr/share/info" --datarootdir="/usr/share" --sysconfdir="/etc" --program-prefix="" --with-bootdir="/boot" --with-grubdir="grub" --disable-silent-rules --disable-werror >/dev/null 2>&1
+  !cd grub-2.06 && ./configure --prefix=/usr --with-platform="efi" --target i386--enable-mm-debug --enable-nls --enable-device-mapper --enable-cache-stats --enable-grub-mkfont --enable-grub-mount --prefix="/usr" --bindir="/usr/bin" --sbindir="/usr/bin" --mandir="/usr/share/man" --infodir="/usr/share/info" --datarootdir="/usr/share" --sysconfdir="/etc" --program-prefix="" --with-bootdir="/boot" --with-grubdir="grub" --disable-silent-rules --disable-werror >/dev/null 2>&1
   !cd grub-2.06 && make >/dev/null 2>&1
   !cd grub-2.06 && DESTDIR="/" PREFIX="/usr" sudo make install >/dev/null 2>&1
   print("install grub-efi-x86_64")
