@@ -1,0 +1,9 @@
+[Unit]
+Description=Setup an encrypted persistent storage on the USB drive
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/setup-persistent-storage
+
+[Install]
+WantedBy=multi-user.target
