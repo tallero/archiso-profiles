@@ -24,4 +24,5 @@ keys_image_tool_options=('-zlz4hc,12')
 file_permissions=(
   ["/etc/shadow"]="0:0:400"
   ["/run/archiso/keys"]="0:0:700"
+  ["/usr/local/bin/setup-persistent-storage"]="0:0:700"
 )
