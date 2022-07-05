@@ -18,8 +18,11 @@ _find_iso() {
 
 _get_avail_space() {
     disk_avail="$(parted "${disk}" unit MB print free | grep 'Free Space' | tail -n1 | awk '{print $3}' | sed 's/MB//g')"
+    disk_avail="${disk_avail%.*}"
     mem_avail=$(( $(grep MemAvailable <"/proc/meminfo" | awk '{print $2}') / 1000))
-    avail=$(( disk_avail < mem_avail ? disk_avail : mem_avail ))
+    mem_avail="${mem_avail%.*}"
+
+    avail=$((disk_avail < mem_avail ? disk_avail : mem_avail))
 }
 
 _mount_keys_device() {
@@ -97,6 +100,7 @@ _make_persistent() {
     image_path="/tmp/persistent.img"
     passwd_path="/tmp/persistent.passwd"
     mount -o remount,rw,size=1E "/run/archiso/cowspace"
+    echo "Creating ext4 image (${avail}M)"
     fallocate -l "${avail}M" "${image_path}"
     losetup "/dev/loop314" "${image_path}"
     luks_format
@@ -111,12 +115,13 @@ _make_persistent() {
 }
 
 _add_persistent() {
-    xorriso -indev "${disk}" -outdev "${disk}" -append_partition 3 "${guid}" "${image_path}" -boot_image any replay
+    xorriso -drive_class clear_list caution -indev "stdio:${disk}" -outdev "stdio:${disk}" -append_partition 3 "${guid}" "${image_path}" -boot_image any replay
 }
 
 _validate_requirements() {
-    partitions=$(partx -g "${disk}" | wl -l)
-    if [ "${partitions}" -gt 2 ]; then
+    partitions=$(partx -g "${disk}" | wc -l)
+    if [[ "${partitions}" -gt 2 ]]; then
+	echo "The ISO has been modified already."
         exit 0
     fi
     _resolve_encryption_key
