@@ -111,7 +111,7 @@ _make_persistent() {
 }
 
 _add_persistent() {
-    xorriso -indev "stdio:${disk}" -outdev "${disk}" -append_partition 3 "${guid}" "${image_path}" -boot_image any replay
+    xorriso -indev "${disk}" -outdev "stdio:${disk}" -append_partition 3 "${guid}" "${image_path}" -boot_image any replay
 }
 
 _validate_requirements() {
