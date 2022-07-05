@@ -3,6 +3,8 @@
 This repository contain additional archiso profiles.
 It depends on `archiso-encryption`.
 
+## Profiles
+
 ### `desktop`
 Desktop profile.
 - `airootfs_image_type`:`erofs+luks`;
@@ -35,3 +37,12 @@ Encryption-enabled replica of `baseline`:
 ### `desktop`
 
 A GNOME based profile equipped with the basics.
+
+## Download
+
+The profiles can be built on
+[Google Colab](https://colab.research.google.com/github/tallero/archiso-profiles/blob/noapps/jupyter/jupyter.ipynb).
+
+# License
+
+All the code is released under AGPLv3.
