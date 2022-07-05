@@ -1,0 +1,134 @@
+#!/bin/bash
+
+grub_cfg="/run/archiso/bootmnt/EFI/BOOT/grub.cfg"
+archisouuid="$(grep "archisouuid=" < "${grub_cfg}" | head -1 | awk '{print $5}' | sed 's/archisouuid=//g')"
+archisolabel="$(grep "archisolabel=" < "${grub_cfg}" | head -1 | awk '{print $5}' | sed 's/archisouuid=//g')"
+guid="0FC63DAF-8483-4772-8E79-3D69D8477DE4"
+
+_find_iso() {
+    for disk in /dev/disk/by-diskseq/*; do
+        disk_uuid=$(blkid -o value -s UUID "${disk}")
+        disk_type=$(blkid -o value -s TYPE "${disk}")
+        #shellcheck disable=SC2154
+        if [ "${disk_uuid}" = "${archisouuid}" ] && [ "${disk_type}" = "iso9660" ]; then
+	    break
+        fi
+    done
+}
+
+_get_avail_space() {
+    disk_avail="$(parted "${disk}" unit MB print free | grep 'Free Space' | tail -n1 | awk '{print $3}' | sed 's/MB//g')"
+    mem_avail=$(( $(grep MemAvailable <"/proc/meminfo" | awk '{print $2}') / 1000))
+    avail=$(( disk_avail < mem_avail ? disk_avail : mem_avail ))
+}
+
+_mount_keys_device() {
+    keys_device="/dev/disk/by-label/${archisolabel}_KEYS"
+    mkdir /ckey /ckey2
+    chmod 700 /ckey /ckey2
+    mount "${keys_device}" "/ckey"
+    cryptsetup --type luks2 open "/ckey/keys.erofs" "keys.map"
+    mount -t erofs "/dev/mapper/keys.map" "/ckey2"
+}
+
+_unmount_keys_device() {
+    umount "/ckey2"
+    _close_luks_device "/dev/mapper/keys.map"
+    umount "/ckey"
+}
+
+_resolve_encryption_key() {
+    local passwd_path="/tmp/persistent.passwd"
+    if [ "${encryption_key}" = "" ]; then
+	echo -n "Enter a new password for the persistent partition:"
+	read -rs password
+        echo "${password}" > "${passwd_path}"
+	encryption_key="${passwd_path}"
+    elif [ ! -f "${encryption_key}" ]; then
+        if [ "${encryption_key}" = "auto" ]; then
+            encryption_key="${passwd_path}"
+	    dd if="/dev/random" bs=32 count=1 of="${encryption_key}"
+	    echo "The encryption key has been saved to ${encryption_key}"
+	elif [ "${encryption_key}" = "airootfs" ]; then
+	    _mount_keys_device
+	    mkdir /tmp/keys
+	    chmod 700 /tmp/keys
+	    cp /ckey2/airootfs.key /tmp/keys/storage.key
+	    encryption_key="/tmp/keys/storage.key"
+        else
+	    echo "File ${encryption_key} does not exist."
+	    exit 0
+	fi
+    fi
+}
+
+_luks_format(){
+    mapper=$(basename "${image_path}")".map"
+    image_device="/dev/mapper/${mapper}"
+    cryptsetup_opts=('--type' 'luks2')
+    if [ "${encryption_key}" != "" ]; then
+        cryptsetup_opts+=("--key-file=${encryption_key}")
+    fi
+    cryptsetup_opts+=('--integrity' 'cmac-aes' \
+	              '--sector-size' '4096' \
+		      '--pbkdf-memory' 256)
+    while ! eval "cryptsetup -q -y luksFormat ${cryptsetup_opts[*]} ${image_path}"; do
+        sleep 1
+    done
+    while ! eval "cryptsetup open ${image_path} ${mapper}"; do
+        _close_luks_device "${image_device}"
+    done
+}
+
+_close_luks_device() {
+    local device="${1}"
+    local mapper
+    mapper=$(basename "${device}")
+    blockdev --flushbufs "${device}"
+    cryptsetup luksClose "${mapper}" || true
+    if [ -e "${device}" ]; then
+        dmsetup remove "${device}" || true
+    fi
+    sync
+}
+
+_make_persistent() {
+    encryption_key="${1}"
+    image_path="/tmp/persistent.img"
+    passwd_path="/tmp/persistent.passwd"
+    mount -o remount,rw,size=1E "/run/archiso/cowspace"
+    fallocate -l "${avail}M" "${image_path}"
+    losetup "/dev/loop314" "${image_path}"
+    luks_format
+    mkfs.ext4 -O '^has_journal,^resize_inode' \
+	      -E 'lazy_itable_init=0,root_owner=0:0' \
+	      -m '0' -F -U 'clear' -- "${image_device}"
+    tune2fs -c 0 -i 0 - "${image_device}" > /dev/null
+    sync
+    _close_luks_device "${image_device}"
+    losetup -d "/dev/loop314"
+    # rm "${encryption_key}"
+}
+
+_add_persistent() {
+    xorriso -indev "${disk}" -outdev "${disk}" -append_partition 3 "${guid}" "${image_path}" -boot_image any replay
+}
+
+_validate_requirements() {
+    partitions=$(partx -g "${disk}" | wl -l)
+    if [ "${partitions}" -gt 2 ]; then
+        exit 0
+    fi
+    _resolve_encryption_key
+}
+
+_start() {
+    local encryption_key="${1}"
+    _find_iso
+    _validate_requirements
+    _get_avail_space
+    _make_persistent "${encryption_key}"
+    _add_persistent
+}
+
+_start "${1}"
