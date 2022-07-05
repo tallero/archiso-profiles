@@ -22,7 +22,23 @@ _get_avail_space() {
     avail=$(( disk_avail < mem_avail ? disk_avail : mem_avail ))
 }
 
+_mount_keys_device() {
+    keys_device="/dev/disk/by-label/${archisolabel}_KEYS"
+    mkdir /ckey /ckey2
+    chmod 700 /ckey /ckey2
+    mount "${keys_device}" "/ckey"
+    cryptsetup --type luks2 open "/ckey/keys.erofs" "keys.map"
+    mount -t erofs "/dev/mapper/keys.map" "/ckey2"
+}
+
+_unmount_keys_device() {
+    umount "/ckey2"
+    _close_luks_device "/dev/mapper/keys.map"
+    umount "/ckey"
+}
+
 _resolve_encryption_key() {
+    local passwd_path="/tmp/persistent.passwd"
     if [ "${encryption_key}" = "" ]; then
 	echo -n "Enter a new password for the persistent partition:"
 	read -rs password
@@ -33,10 +49,16 @@ _resolve_encryption_key() {
             encryption_key="${passwd_path}"
 	    dd if="/dev/random" bs=32 count=1 of="${encryption_key}"
 	    echo "The encryption key has been saved to ${encryption_key}"
-        elif [ "${encryption_key}" != "auto" ]; then
+	elif [ "${encryption_key}" = "airootfs" ]; then
+	    _mount_keys_device
+	    mkdir /tmp/keys
+	    chmod 700 /tmp/keys
+	    cp /ckey2/airootfs.key /tmp/keys/storage.key
+	    encryption_key="/tmp/keys/storage.key"
+        else
 	    echo "File ${encryption_key} does not exist."
 	    exit 0
-	fi	
+	fi
     fi
 }
 
@@ -85,6 +107,7 @@ _make_persistent() {
     sync
     _close_luks_device "${image_device}"
     losetup -d "/dev/loop314"
+    # rm "${encryption_key}"
 }
 
 _add_persistent() {
@@ -100,11 +123,12 @@ _validate_requirements() {
 }
 
 _start() {
+    local encryption_key="${1}"
     _find_iso
     _validate_requirements
     _get_avail_space
-    _make_persistent "auto"
+    _make_persistent "${encryption_key}"
     _add_persistent
 }
 
-_start
+_start "${1}"
