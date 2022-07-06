@@ -40,8 +40,16 @@ A GNOME based profile equipped with the basics.
 
 ## Download
 
-The profiles can be built on
+The profiles can be built and downloaded online on
 [Google Colab](https://colab.research.google.com/github/tallero/archiso-profiles/blob/noapps/jupyter/jupyter.ipynb).
+
+## Build
+
+```
+$ cd profile
+$ ./build_repo.sh
+# mkarchiso -v ./ 
+```
 
 # License
 
