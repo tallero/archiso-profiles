@@ -58,7 +58,7 @@ The profiles can be built and downloaded online on
 
 As any other Archiso profile:
 
-```
+```console
 $ cd profile
 $ ../gitlab/ci/build_repo.sh src
 # mkarchiso -v ./ 
