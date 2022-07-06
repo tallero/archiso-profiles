@@ -1,7 +1,9 @@
 # Archiso profiles
 
-This repository contain additional archiso profiles.
-It depends on `archiso-persistent-git` ([`AUR`](https://aur.archlinux.org/packages/archiso-persistent-git)) and .
+This repository contain additional 
+[Archiso](https://aur.archlinux.org/archlinux/archiso)
+profiles. It depends on `archiso-persistent-git` 
+([`AUR`](https://aur.archlinux.org/packages/archiso-persistent-git)) and .
 
 ## Profiles
 
@@ -45,10 +47,7 @@ Encryption-enabled replica of `releng`:
 - mkinitcpio-archiso-encryption: replaces "mkinitcpio-archiso"
 ```
 
-## Download
-
-The profiles can be built and downloaded online on
-[Google Colab](https://colab.research.google.com/github/tallero/archiso-profiles/blob/noapps/jupyter/jupyter.ipynb).
+## Download <br> <sub>[*Google Colab*](https://colab.research.google.com/github/tallero/archiso-profiles/blob/noapps/jupyter/jupyter.ipynb)</sub>
 
 ## Build
 
