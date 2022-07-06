@@ -47,7 +47,7 @@ Encryption-enabled replica of `releng`:
 - mkinitcpio-archiso-encryption: replaces "mkinitcpio-archiso"
 ```
 
-### Download <br> <sub><sub>[*Google Colab*](https://colab.research.google.com/github/tallero/archiso-profiles/blob/noapps/jupyter/jupyter.ipynb)</sub></sub>
+### Download <br> <sub>[*Google Colab*](https://colab.research.google.com/github/tallero/archiso-profiles/blob/noapps/jupyter/jupyter.ipynb)</sub>
 
 ### Build
 
