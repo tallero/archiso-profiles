@@ -5,7 +5,7 @@ unset mode
 _packages=(
     "mkinitcpio-archiso-encryption-git"
     "cryptsetup-nested-cryptkey"
-    "archiso-persistence-git"
+    "archiso-persistent-git"
     "plymouth-nested-cryptkey"
     "st"
     "dwm")
