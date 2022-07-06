@@ -10,7 +10,7 @@ Desktop profile.
 ```yaml
 - `airootfs_image_type`:`erofs+luks`;
 - `keys_image_type`: `erofs+luks`;
-- `buildmodes`:`iso` and `keys`;
+- `buildmodes`: `iso` and `keys`;
 - `cryptsetup-luks-cryptkey` replaces `cryptsetup`;
 - `plymouth-luks-cryptkey` replaces `plymouth`;
 - `mkinitcpio-archiso` is replaced by `mkinitcpio-archiso-encryption`;
