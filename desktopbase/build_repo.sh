@@ -31,7 +31,3 @@ _build_repo() {
 }
 
 _build_repo
-
-pkexec "pacman -Sy base-devel docbook-xsl shfmt"
-
-pkexec "/usr/bin/mkarchiso -v ./"
