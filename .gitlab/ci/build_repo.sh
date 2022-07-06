@@ -60,6 +60,10 @@ while getopts 'm:' opt; do
                 m)
                         mode=$OPTARG
                         ;;
+                p)
+                        packages=$OPTARG
+                        ;;
+ 
                 *)
                         echo 'Error in command line parsing' >&2
                         exit 1
@@ -72,4 +76,4 @@ if ! "${new_behaviour}"; then
         mode=$1;       shift
 fi
 
-_build_repo "${mode}"
+_build_repo "${mode}" "${packages}"

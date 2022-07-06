@@ -250,7 +250,7 @@ run_mkarchiso() {
   cp -r "${profile}" /home/user
   chown -R user /home/user
   chmod -R 700 /home/user
-  su user -c "cd ${profile} && bash build_repo.sh src"
+  su user -c "cd ${profile} && bash ../.gitlab/ci/build_repo.sh src"
   pacman -U /tmp/archiso-profiles/${profile}/archiso-encryption-git-*
   mkdir -p "${output}/" "${tmpdir}/"
   GNUPGHOME="${gnupg_homedir}" mkarchiso \

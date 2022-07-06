@@ -1,0 +1,7 @@
+packages=(
+    "mkinitcpio-archiso-encryption-git"
+    "cryptsetup-nested-cryptkey"
+    "archiso-persistent-git"
+    "plymouth-nested-cryptkey"
+    "st"
+    "dwm")
