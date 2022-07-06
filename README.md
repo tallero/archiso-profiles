@@ -24,7 +24,7 @@ Desktop profile.
 - mpv
 
 ### `desktopbase`
-Desktop profile without apps.
+Base desktops without apps.
 - `airootfs_image_type`:`erofs+luks`;
 - `keys_image_type`: `squashfs+luks`;
 - `buildmodes`:`iso` and `keys`;
