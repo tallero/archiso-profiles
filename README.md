@@ -28,7 +28,7 @@ Desktop profile.
 ### `desktopbase` <br> <sub>*`archlinux-desktopbase-git`* ([`AUR`](https://aur.archlinux.org/packages/archlinux-desktopbase-git))</sub>
 Base desktops without apps. Same options as `desktop`.
 
-### `ereleng` <sub>*`archlinux`* ([`AUR`](https://aur.archlinux.org/packages/archlinux))</sub>
+### `ereleng` <br> <sub>*`archlinux`* ([`AUR`](https://aur.archlinux.org/packages/archlinux))</sub>
 
 Encryption-enabled replica of `releng`:
 ```yaml
@@ -39,7 +39,7 @@ Encryption-enabled replica of `releng`:
 - `mkinitcpio-archiso-encryption`: replaces `mkinitcpio-archiso`;
 ```
 
-### `ebaseline` <sub>*`archlinux-ebaseline`* ([`AUR`](https://aur.archlinux.org/packages/archlinux-ebaseline))</sub>
+### `ebaseline` <br> <sub>*`archlinux-ebaseline`* ([`AUR`](https://aur.archlinux.org/packages/archlinux-ebaseline))</sub>
 Encryption-enabled replica of `baseline`:
 ```yaml
 - `airootfs_image_type`: `erofs+luks`;
