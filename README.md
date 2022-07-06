@@ -5,7 +5,7 @@ It depends on `archiso-persistent-git` ([`AUR`](https://aur.archlinux.org/packag
 
 ## Profiles
 
-### `desktop` <sub>`archlinux-desktop` ([`AUR`](https://aur.archlinux.org/packages/archlinux-desktop))</sub>
+### `desktop` <br> <sub>*`archlinux-desktop`* ([`AUR`](https://aur.archlinux.org/packages/archlinux-desktop))</sub>
 Desktop profile.
 - `airootfs_image_type`:`erofs+luks`;
 - `keys_image_type`: `squashfs+luks`;
@@ -23,7 +23,7 @@ Desktop profile.
 - Marker
 - mpv
 
-### `desktopbase` <sub>`archlinux-desktopbase-git` ([`AUR`](https://aur.archlinux.org/packages/archlinux-desktopbase-git))</sub>
+### `desktopbase` <br> <sub>*`archlinux-desktopbase-git`* ([`AUR`](https://aur.archlinux.org/packages/archlinux-desktopbase-git))</sub>
 Base desktops without apps.
 - `airootfs_image_type`:`erofs+luks`;
 - `keys_image_type`: `squashfs+luks`;
@@ -33,7 +33,7 @@ Base desktops without apps.
 - `mkinitcpio-archiso` is replaced by `mkinitcpio-archiso-encryption`;
 - `encrypt` hook enabled.
 
-### `ereleng` <sub>`archlinux` ([`AUR`](https://aur.archlinux.org/packages/archlinux))</sub>
+### `ereleng` <sub>*`archlinux`* ([`AUR`](https://aur.archlinux.org/packages/archlinux))</sub>
 
 Encryption-enabled replica of `releng`:
 - `airootfs_image_type`: `squashfs+luks`;
@@ -43,7 +43,7 @@ Encryption-enabled replica of `releng`:
 - `mkinitcpio-archiso` is replaced by `mkinitcpio-archiso-encryption`;
 - `encrypt` hook enabled.
 
-### `ebaseline` <sub>`archlinux-ebaseline` ([`AUR`](https://aur.archlinux.org/packages/archlinux-ebaseline))</sub>
+### `ebaseline` <sub>*`archlinux-ebaseline`* ([`AUR`](https://aur.archlinux.org/packages/archlinux-ebaseline))</sub>
 Encryption-enabled replica of `baseline`:
 - `airootfs_image_type`:`erofs+luks`;
 - `keys_image_type`: `squashfs+luks`;
