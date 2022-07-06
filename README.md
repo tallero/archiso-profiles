@@ -5,9 +5,9 @@ This repository contain additional
 profiles. It depends on `archiso-persistent-git` 
 ([`AUR`](https://aur.archlinux.org/packages/archiso-persistent-git)) and .
 
-## Profiles
+### Profiles
 
-### `ebaseline` <br> <sub>*`archlinux-ebaseline`* ([`AUR`](https://aur.archlinux.org/packages/archlinux-ebaseline))</sub>
+#### `ebaseline` <br> <sub>*`archlinux-ebaseline`* ([`AUR`](https://aur.archlinux.org/packages/archlinux-ebaseline))</sub>
 Encryption-enabled replica of `baseline`:
 ```yaml
 - airootfs_image_type: "erofs+luks";
@@ -17,7 +17,7 @@ Encryption-enabled replica of `baseline`:
 - mkinitcpio-archiso-encryption: replaces "mkinitcpio-archiso";
 ```
 
-### `desktopbase` <br> <sub>*`archlinux-desktopbase-git`* ([`AUR`](https://aur.archlinux.org/packages/archlinux-desktopbase-git))</sub>
+#### `desktopbase` <br> <sub>*`archlinux-desktopbase-git`* ([`AUR`](https://aur.archlinux.org/packages/archlinux-desktopbase-git))</sub>
 Base desktops based on `ebaseline` without apps. Same options as `desktop`.
 
 ```yaml
@@ -25,10 +25,10 @@ Base desktops based on `ebaseline` without apps. Same options as `desktop`.
 - plymouth-luks-cryptkey: replaces `plymouth`
 ```
 
-### `desktop` <br> <sub>*`archlinux-desktop`* ([`AUR`](https://aur.archlinux.org/packages/archlinux-desktop))</sub>
+#### `desktop` <br> <sub>*`archlinux-desktop`* ([`AUR`](https://aur.archlinux.org/packages/archlinux-desktop))</sub>
 Desktop profile based on `desktopbase`.
 
-#### Apps
+##### Apps
 - Abiword
 - Firefox
 - Gnumeric
@@ -36,7 +36,7 @@ Desktop profile based on `desktopbase`.
 - Marker
 - mpv
 
-### `ereleng` <br> <sub>*`archlinux`* ([`AUR`](https://aur.archlinux.org/packages/archlinux))</sub>
+#### `ereleng` <br> <sub>*`archlinux`* ([`AUR`](https://aur.archlinux.org/packages/archlinux))</sub>
 
 Encryption-enabled replica of `releng`:
 ```yaml
@@ -47,9 +47,9 @@ Encryption-enabled replica of `releng`:
 - mkinitcpio-archiso-encryption: replaces "mkinitcpio-archiso"
 ```
 
-## Download <br> <sub>[*Google Colab*](https://colab.research.google.com/github/tallero/archiso-profiles/blob/noapps/jupyter/jupyter.ipynb)</sub>
+### Download <br> <sub>[*Google Colab*](https://colab.research.google.com/github/tallero/archiso-profiles/blob/noapps/jupyter/jupyter.ipynb)</sub>
 
-## Build
+### Build
 
 As with any other Archiso profile:
 
@@ -59,6 +59,6 @@ $ ../.gitlab/ci/build_repo.sh src
 # mkarchiso -v ./ 
 ```
 
-# License
+### License
 
 All the code is released under GNU Affero General Public License version 3.
