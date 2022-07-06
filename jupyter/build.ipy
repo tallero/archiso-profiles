@@ -155,6 +155,10 @@ def install_arch_install_scripts():
   !make -C arch-install-scripts-git >/dev/null 2>&1
   !sudo make -C arch-install-scripts-git PREFIX=/usr DESTDIR="/" install >/dev/null 2>&1
 
+def install_pacaur():
+  print("install pacaur")
+  !pacman
+
 def install_archiso():
   print("install archiso")
   # !rm -rf archiso
@@ -232,7 +236,7 @@ def build_ereleng():
   !git clone https://gitlab.archlinux.org/tallero/archiso-profiles >/dev/null 2>&1
   !useradd user >/dev/null 2>&1
   !chown -R user:user archiso-profiles /tmp
-  !su user -c "cd archiso-profiles/ereleng && bash build_repo.sh"
+  !su user -c "cd archiso-profiles/ereleng && ../.gitlab/ci/build_repo.sh fakepkg"
   #!cd archiso-profiles/desktop && bash build_repo.sh
 
 def install_unpackaged_deps():
