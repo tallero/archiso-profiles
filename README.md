@@ -45,6 +45,8 @@ The profiles can be built and downloaded online on
 
 ## Build
 
+As any other Archiso profile:
+
 ```
 $ cd profile
 $ ./build_repo.sh
