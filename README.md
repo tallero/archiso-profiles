@@ -9,7 +9,7 @@ It depends on `archiso-persistent-git` ([`AUR`](https://aur.archlinux.org/packag
 Desktop profile.
 ```yaml
 - `airootfs_image_type`:`erofs+luks`;
-- `keys_image_type`: `squashfs+luks`;
+- `keys_image_type`: `erofs+luks`;
 - `buildmodes`:`iso` and `keys`;
 - `cryptsetup-luks-cryptkey` replaces `cryptsetup`;
 - `plymouth-luks-cryptkey` replaces `plymouth`;
@@ -26,10 +26,7 @@ Desktop profile.
 - mpv
 
 ### `desktopbase` <br> <sub>*`archlinux-desktopbase-git`* ([`AUR`](https://aur.archlinux.org/packages/archlinux-desktopbase-git))</sub>
-Base desktops without apps.
-```yaml
-- `same options as `desktop`
-```
+Base desktops without apps. Same options as `desktop`
 
 ### `ereleng` <sub>*`archlinux`* ([`AUR`](https://aur.archlinux.org/packages/archlinux))</sub>
 
