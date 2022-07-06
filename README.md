@@ -11,9 +11,27 @@ Desktop profile.
 - `keys_image_type`: `squashfs+luks`;
 - `buildmodes`:`iso` and `keys`;
 - `cryptsetup-luks-cryptkey` replaces `cryptsetup`;
+- `plymouth-luks-cryptkey` replaces `plymouth`;
 - `mkinitcpio-archiso` is replaced by `mkinitcpio-archiso-encryption`;
 - `encrypt` hook enabled.
 
+#### Apps
+- Abiword
+- Firefox
+- Gnumeric
+- gitg
+- Marker
+- mpv
+
+### `desktopbase`
+Desktop profile without apps.
+- `airootfs_image_type`:`erofs+luks`;
+- `keys_image_type`: `squashfs+luks`;
+- `buildmodes`:`iso` and `keys`;
+- `cryptsetup-luks-cryptkey` replaces `cryptsetup`;
+- `plymouth-luks-cryptkey` replaces `plymouth`;
+- `mkinitcpio-archiso` is replaced by `mkinitcpio-archiso-encryption`;
+- `encrypt` hook enabled.
 
 ### `ereleng`
 
