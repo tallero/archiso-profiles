@@ -3,7 +3,8 @@
 This repository contain additional 
 [Archiso](https://aur.archlinux.org/archlinux/archiso)
 profiles. It depends on `archiso-persistent-git` 
-([`AUR`](https://aur.archlinux.org/packages/archiso-persistent-git)) and .
+([`AUR`](https://aur.archlinux.org/packages/archiso-persistent-git))
+and `polkit`.
 
 ### Profiles
 
