@@ -40,6 +40,8 @@ _build_repo() {
     _build_pkg "mkinitcpio-archiso-encryption" "${_mode}"
     _build_pkg "plymouth-nested-cryptkey" "${_mode}"
     _build_pkg "archiso-encryption-git" "${_mode}"
+    _build_pkg "st" "${_mode}"
+    _build_pkg "dwm" "${_mode}"
     cd ..
     rm -rf repo
 }
