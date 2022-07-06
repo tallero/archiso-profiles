@@ -7,13 +7,14 @@ It depends on `archiso-persistent-git` ([`AUR`](https://aur.archlinux.org/packag
 
 ### `desktop` <br> <sub>*`archlinux-desktop`* ([`AUR`](https://aur.archlinux.org/packages/archlinux-desktop))</sub>
 Desktop profile.
+
 ```yaml
-- `airootfs_image_type`:`erofs+luks`;
-- `keys_image_type`: `erofs+luks`;
-- `buildmodes`: `iso` and `keys`;
-- `cryptsetup-luks-cryptkey` replaces `cryptsetup`;
-- `plymouth-luks-cryptkey` replaces `plymouth`;
-- `mkinitcpio-archiso` is replaced by `mkinitcpio-archiso-encryption`;
+- airootfs_image_type: erofs+luks
+- keys_image_type: erofs+luks
+- buildmodes: `iso` and `keys`
+- cryptsetup-luks-cryptkey: replaces `cryptsetup`
+- plymouth-luks-cryptkey: replaces `plymouth`
+- mkinitcpio-archiso-encryption: replaces `mkinitcpio-archiso`
 ```
 
 #### Apps
