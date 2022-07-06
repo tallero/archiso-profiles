@@ -1,7 +1,7 @@
 # Archiso profiles
 
 This repository contain additional archiso profiles.
-It depends on `archiso-persistent-git` ([`AUR`](https://aur.archlinux.org/packages/archiso-persistent-git)).
+It depends on `archiso-persistent-git` ([`AUR`](https://aur.archlinux.org/packages/archiso-persistent-git)) and .
 
 ## Profiles
 
@@ -52,7 +52,7 @@ The profiles can be built and downloaded online on
 
 ## Build
 
-As any other Archiso profile:
+As with any other Archiso profile:
 
 ```console
 $ cd archiso-profiles/<profile>
@@ -62,4 +62,4 @@ $ ../.gitlab/ci/build_repo.sh src
 
 # License
 
-All the code is released under AGPLv3.
+All the code is released under GNU Affero General Public License version 3.
