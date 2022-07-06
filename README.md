@@ -7,6 +7,7 @@ It depends on `archiso-persistent-git` ([`AUR`](https://aur.archlinux.org/packag
 
 ### `desktop` <br> <sub>*`archlinux-desktop`* ([`AUR`](https://aur.archlinux.org/packages/archlinux-desktop))</sub>
 Desktop profile.
+```yaml
 - `airootfs_image_type`:`erofs+luks`;
 - `keys_image_type`: `squashfs+luks`;
 - `buildmodes`:`iso` and `keys`;
@@ -14,6 +15,7 @@ Desktop profile.
 - `plymouth-luks-cryptkey` replaces `plymouth`;
 - `mkinitcpio-archiso` is replaced by `mkinitcpio-archiso-encryption`;
 - `encrypt` hook enabled.
+```
 
 #### Apps
 - Abiword
@@ -25,13 +27,9 @@ Desktop profile.
 
 ### `desktopbase` <br> <sub>*`archlinux-desktopbase-git`* ([`AUR`](https://aur.archlinux.org/packages/archlinux-desktopbase-git))</sub>
 Base desktops without apps.
-- `airootfs_image_type`:`erofs+luks`;
-- `keys_image_type`: `squashfs+luks`;
-- `buildmodes`:`iso` and `keys`;
-- `cryptsetup-luks-cryptkey` replaces `cryptsetup`;
-- `plymouth-luks-cryptkey` replaces `plymouth`;
-- `mkinitcpio-archiso` is replaced by `mkinitcpio-archiso-encryption`;
-- `encrypt` hook enabled.
+```yaml
+- `same options as `desktop`
+```
 
 ### `ereleng` <sub>*`archlinux`* ([`AUR`](https://aur.archlinux.org/packages/archlinux))</sub>
 
