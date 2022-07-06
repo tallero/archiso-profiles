@@ -1,7 +1,7 @@
 # Archiso profiles
 
 This repository contain additional archiso profiles.
-It depends on `archiso-encryption`.
+It depends on `archiso-persistent-git` ([`AUR`](https://aur.archlinux.org/packages/archiso-persistent-git)).
 
 ## Profiles
 
