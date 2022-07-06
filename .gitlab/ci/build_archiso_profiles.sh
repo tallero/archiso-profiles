@@ -232,27 +232,19 @@ create_ephemeral_codesigning_key() {
 }
 
 run_mkarchiso() {
+  local _setup_user=$(pwd)"/.gitlab/ci/setup_user.sh"
+  local _build_repo=$(pwd)/.gitlab/ci/build_repo.sh src"
   # run mkarchiso
   create_ephemeral_pgp_key
   create_ephemeral_codesigning_key
 
-  print_section_start "mkarchiso" "Running mkarchiso"
-  # git clone https://gitlab.archlinux.org/tallero/archiso archiso
-  # git -C archiso branch crypto
-  useradd user
-  mkdir -p /home/user
-  echo "Debug CI"
-  echo "profile: ${profile}"
-  echo "buildmode: ${buildmode}"
-  echo "Debug CI"
-  echo $(pwd)
-  ls
+  print_section_start "mkarchiso" "Build ${profile} ${buildmode} dependencies"
+  "${_setup_user}"
   cp -r "${profile}" /home/user
-  chown -R user /home/user
-  chmod -R 700 /home/user
-  su user -c "cd ${profile} && bash ../.gitlab/ci/build_repo.sh src"
-  pacman -U /tmp/archiso-profiles/${profile}/archiso-encryption-git-*
+  chown -R user "/home/user/${profile}"
+  su user -c "cd ${profile} && ${_build_repo}"
   mkdir -p "${output}/" "${tmpdir}/"
+  print_section_start "mkarchiso" "Running mkarchiso"
   GNUPGHOME="${gnupg_homedir}" mkarchiso \
       -D "${install_dir}" \
       -c "${codesigning_cert} ${codesigning_key}" \
