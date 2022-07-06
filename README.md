@@ -1,4 +1,4 @@
-# Archiso profiles
+# `archiso-profiles`
 
 This repository contain additional 
 [Archiso](https://aur.archlinux.org/archlinux/archiso)
