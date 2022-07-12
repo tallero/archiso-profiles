@@ -49,27 +49,28 @@ _build_repo() {
 
 new_behaviour=false
 
-while getopts 'm:p:' opt; do
-        new_behavior=true
+# while getopts 'm:p:' opt; do
+#         new_behavior=true
+# 
+#         case $opt in
+#                 m)
+#                         mode=$OPTARG
+#                         ;;
+#                 p)
+#                         packages=$OPTARG
+#                         ;;
+#  
+#                 *)
+#                         echo 'Error in command line parsing' >&2
+#                         exit 1
+#         esac
+# done
+# 
+# if ! "${new_behaviour}"; then
+#         # Fall back on old behavior.
+# 
+#         mode=$1;       shift
+# fi
 
-        case $opt in
-                m)
-                        mode=$OPTARG
-                        ;;
-                p)
-                        packages=$OPTARG
-                        ;;
- 
-                *)
-                        echo 'Error in command line parsing' >&2
-                        exit 1
-        esac
-done
-
-if ! "${new_behaviour}"; then
-        # Fall back on old behavior.
-
-        mode=$1;       shift
-fi
-
-_build_repo "${mode}" "${packages}"
+# mode, packages.extra
+_build_repo "${1}" "${2}"
