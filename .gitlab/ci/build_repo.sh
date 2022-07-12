@@ -2,14 +2,6 @@
 
 unset mode
 
-_packages=(
-    "mkinitcpio-archiso-encryption-git"
-    "cryptsetup-nested-cryptkey"
-    "archiso-persistent-git"
-    "plymouth-nested-cryptkey"
-    "st"
-    "dwm")
-
 _makepkg() {
     local _pkgname="${1}"
     git clone "https://aur.archlinux.org/${_pkgname}"
@@ -38,13 +30,17 @@ _build_pkg() {
 
 _build_repo() {
     local _mode="${1}"
+    local _packages="${2}"
     local _profile
+    local _pwd
+    _pwd=$(pwd)
     _profile=$(basename "$(pwd)")
+    source "${_pwd}/${_packages}"
     local _server="/tmp/archiso-profiles/${_profile}"
     rm -rf repo "${_server}" && mkdir -p repo "${_server}"
     cd repo || exit
     gpg --recv-keys "D9B0577BD93E98FC" # cryptsetup
-    for _pkg in "${_packages[@]}"; do
+    for _pkg in "${packages[@]}"; do
         _build_pkg "${_pkg}" "${_mode}"
     done
     cd ..
