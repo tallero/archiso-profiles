@@ -49,7 +49,7 @@ _build_repo() {
 
 new_behaviour=false
 
-while getopts 'm:' opt; do
+while getopts 'm:p:' opt; do
         new_behavior=true
 
         case $opt in
