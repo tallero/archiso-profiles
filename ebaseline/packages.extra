@@ -1,0 +1,2 @@
+packages=("cryptsetup-nested-cryptkey"
+          "mkinitcpio-archiso-encryption")
