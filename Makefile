@@ -35,7 +35,7 @@ clean-profiles:
 
 install-profiles:
 	install -d -m 755 $(PROFILE_DIR)/configs
-	for profile in ($(PROFILES)); do cp -a --no-preserve=ownership $profile $(PROFILE_DIR)/configs; done
+	cp -a --no-preserve=ownership $(PROFILES) $(PROFILE_DIR)
 
 install-doc:
 	install -vDm 644 README.md $(DOC_DIR)/extra-profiles.md
