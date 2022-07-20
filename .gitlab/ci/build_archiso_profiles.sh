@@ -232,8 +232,9 @@ create_ephemeral_codesigning_key() {
 }
 
 run_mkarchiso() {
-  local _setup_user="$(pwd)/.gitlab/ci/setup_user.sh"
-  local _build_repo="$(pwd)/.gitlab/ci/build_repo.sh src packages.extra"
+  local _build_repo _setup_user
+  _build_repo="$(pwd)/.gitlab/ci/build_repo.sh src packages.extra"
+  _setup_user="$(pwd)/.gitlab/ci/setup_user.sh"
   # run mkarchiso
   create_ephemeral_pgp_key
   create_ephemeral_codesigning_key

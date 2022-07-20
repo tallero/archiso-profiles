@@ -35,6 +35,7 @@ _build_repo() {
     local _pwd
     _pwd=$(pwd)
     _profile=$(basename "$(pwd)")
+    # shellcheck source=./packages.extra
     source "${_pwd}/${_packages}"
     local _server="/tmp/archiso-profiles/${_profile}"
     rm -rf repo "${_server}" && mkdir -p repo "${_server}"
