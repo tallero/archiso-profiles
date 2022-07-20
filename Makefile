@@ -22,17 +22,20 @@ shellcheck:
 install: install-scripts clean-profiles install-profiles install-doc
 
 install-scripts:
-	install -vDm 755 .gitlab/ci/build_repo.sh -t "$(BIN_DIR)/mkarchisoprofile"
-	install -vDm 755 .gitlab/ci/build_swap.sh  "$(BIN_DIR)/mkarchisoswap"
-	install -vDm 755 .gitlab/ci/setup_user.sh  "$(LIB_DIR)/setup_user.sh"
-	install -vDm 755 .gitlab/ci/setup_user.sh  "$(LIB_DIR)/build_archiso_profiles.sh"
+	install -d -m 755 $(LIB_DIR)/jupyter
+	install -vDm 755 .gitlab/ci/build_repo.sh "$(BIN_DIR)/mkarchisoprofile"
+	install -vDm 755 .gitlab/ci/build_swap.sh "$(BIN_DIR)/mkarchisoswap"
+	install -vDm 755 .gitlab/ci/setup_user.sh "$(LIB_DIR)/setup_user.sh"
+	install -vDm 755 .gitlab/ci/setup_user.sh "$(LIB_DIR)/build_archiso_profiles.sh"
+	cp install -vDm 755 .gitlab/ci/jupyter/* "$(LIB_DIR)/jupyter"
+
 
 clean-profiles:
 	rm -rf $(GIT_FILES)
 
 install-profiles:
 	install -d -m 755 $(PROFILE_DIR)
-	cp -a --no-preserve=ownership configs $(PROFILE_DIR)/
+	cp -a --no-preserve=ownership * $(PROFILE_DIR)/
 
 install-doc:
 	install -vDm 644 $(DOC_FILES) -t $(DOC_DIR)
