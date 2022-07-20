@@ -10,7 +10,8 @@ PROFILE_DIR=$(DESTDIR)$(PREFIX)/share/archiso
 PROFILES=desktop desktopbase ebaseline ereleng
 DOC_FILES=$(wildcard docs/*) $(wildcard *.md)
 SCRIPT_FILES=$(wildcard archiso/*) $(wildcard scripts/*.sh) $(wildcard .gitlab/ci/*.sh) \
-             $(wildcard configs/*/profiledef.sh) $(wildcard configs/*/airootfs/usr/local/bin/*)
+             $(wildcard */profiledef.sh) $(wildcard */packages.extra)
+             $(wildcard */airootfs/usr/local/bin/*)
 GIT_FILES=$(shell find . -name ".gitignore" -o -name ".gitattributes" -o -name ".gitkeep")
 
 all:
