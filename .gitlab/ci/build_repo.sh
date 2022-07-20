@@ -29,13 +29,15 @@ _build_pkg() {
 }
 
 _build_repo() {
+    # shellcheck source=./packages.extra
+    # shellcheck disable=SC1091
+    # shellcheck disable=SC2154
     local _mode="${1}"
     local _packages="${2}"
     local _profile
     local _pwd
     _pwd=$(pwd)
     _profile=$(basename "$(pwd)")
-    # shellcheck source=./packages.extra
     source "${_pwd}/${_packages}"
     local _server="/tmp/archiso-profiles/${_profile}"
     rm -rf repo "${_server}" && mkdir -p repo "${_server}"
@@ -47,31 +49,6 @@ _build_repo() {
     cd ..
     rm -rf repo
 }
-
-new_behaviour=false
-
-# while getopts 'm:p:' opt; do
-#         new_behavior=true
-# 
-#         case $opt in
-#                 m)
-#                         mode=$OPTARG
-#                         ;;
-#                 p)
-#                         packages=$OPTARG
-#                         ;;
-#  
-#                 *)
-#                         echo 'Error in command line parsing' >&2
-#                         exit 1
-#         esac
-# done
-# 
-# if ! "${new_behaviour}"; then
-#         # Fall back on old behavior.
-# 
-#         mode=$1;       shift
-# fi
 
 # mode, packages.extra
 _build_repo "${1}" "${2}"
