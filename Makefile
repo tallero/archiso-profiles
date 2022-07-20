@@ -10,7 +10,7 @@ PROFILE_DIR=$(DESTDIR)$(PREFIX)/share/archiso
 DOC_FILES=$(wildcard docs/*) $(wildcard *.rst)
 SCRIPT_FILES=$(wildcard archiso/*) $(wildcard scripts/*.sh) $(wildcard .gitlab/ci/*.sh) \
              $(wildcard configs/*/profiledef.sh) $(wildcard configs/*/airootfs/usr/local/bin/*)
-GIT_FILES=$(shell find . -name ".git")
+GIT_FILES=$(shell find . -name "*.git*")
 
 all:
 
