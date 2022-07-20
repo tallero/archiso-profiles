@@ -30,15 +30,12 @@ install-scripts:
 	install -vDm 755 .gitlab/ci/setup_user.sh "$(LIB_DIR)/build_archiso_profiles.sh"
 	cp -a --no-preserve=ownership .gitlab/ci/jupyter/* "$(LIB_DIR)/jupyter"
 
-
 clean-profiles:
 	rm -rf $(GIT_FILES)
 
 install-profiles:
 	install -d -m 755 $(PROFILE_DIR)
-	for profile in $(PROFILES); do
-	  cp -a --no-preserve=ownership * $(PROFILE_DIR)/"${profile}"
-	done
+	for profile in $(PROFILES); do cp -a --no-preserve=ownership * $(PROFILE_DIR)/"${profile}"; done
 
 install-doc:
 	install -vDm 644 README.md $(DOC_DIR)/extra-profiles.md
