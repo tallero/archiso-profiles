@@ -7,7 +7,8 @@ LIB_DIR=$(DESTDIR)$(PREFIX)/lib/archiso
 DOC_DIR=$(DESTDIR)$(PREFIX)/share/doc/archiso
 PROFILE_DIR=$(DESTDIR)$(PREFIX)/share/archiso
 
-DOC_FILES=$(wildcard docs/*) $(wildcard *.rst)
+PROFILES=desktop desktopbase ebaseline ereleng
+DOC_FILES=$(wildcard docs/*) $(wildcard *.md)
 SCRIPT_FILES=$(wildcard archiso/*) $(wildcard scripts/*.sh) $(wildcard .gitlab/ci/*.sh) \
              $(wildcard configs/*/profiledef.sh) $(wildcard configs/*/airootfs/usr/local/bin/*)
 GIT_FILES=$(shell find . -name ".gitignore" -o -name ".gitattributes" -o -name ".gitkeep")
@@ -27,7 +28,7 @@ install-scripts:
 	install -vDm 755 .gitlab/ci/build_swap.sh "$(BIN_DIR)/mkarchisoswap"
 	install -vDm 755 .gitlab/ci/setup_user.sh "$(LIB_DIR)/setup_user.sh"
 	install -vDm 755 .gitlab/ci/setup_user.sh "$(LIB_DIR)/build_archiso_profiles.sh"
-	cp install -vDm 755 .gitlab/ci/jupyter/* "$(LIB_DIR)/jupyter"
+	cp -a --no-preserve=ownership .gitlab/ci/jupyter/* "$(LIB_DIR)/jupyter"
 
 
 clean-profiles:
@@ -35,9 +36,12 @@ clean-profiles:
 
 install-profiles:
 	install -d -m 755 $(PROFILE_DIR)
-	cp -a --no-preserve=ownership * $(PROFILE_DIR)/
+	for profile in $(PROFILES); do
+	  cp -a --no-preserve=ownership * $(PROFILE_DIR)/"${profile}"
+	done
 
 install-doc:
+	install -vDm 644 README.md $(DOC_DIR)/extra-profiles.md
 	install -vDm 644 $(DOC_FILES) -t $(DOC_DIR)
 
 .PHONY: check install install-doc install-profiles install-scripts shellcheck
