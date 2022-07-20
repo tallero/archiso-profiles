@@ -22,9 +22,9 @@ install: install-scripts install-profiles install-doc
 
 install-scripts:
 	install -vDm 755 .gitlab/ci/build_repo.sh -t "$(BIN_DIR)/mkarchisoprofile"
-	install -vDm 755 .gitlab/ci/build_swap.sh -t "$(BIN_DIR)/mkarchisoswap"
-	install -vDm 755 .gitlab/ci/setup_user.sh -t "$(LIB_DIR)/setup_user.sh"
-	install -vDm 755 .gitlab/ci/setup_user.sh -t "$(LIB_DIR)/build_archiso_profiles.sh"
+	install -vDm 755 .gitlab/ci/build_swap.sh  "$(BIN_DIR)/mkarchisoswap"
+	install -vDm 755 .gitlab/ci/setup_user.sh  "$(LIB_DIR)/setup_user.sh"
+	install -vDm 755 .gitlab/ci/setup_user.sh  "$(LIB_DIR)/build_archiso_profiles.sh"
 
 install-profiles:
 	install -d -m 755 $(PROFILE_DIR)
