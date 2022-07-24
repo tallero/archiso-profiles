@@ -232,6 +232,7 @@ create_ephemeral_codesigning_key() {
 }
 
 run_mkarchiso() {
+  # shellcheck disable=SC1091
   local _build_repo _packages _setup_user
   _build_repo="$(pwd)/.gitlab/ci/build_repo.sh src packages.extra"
   _setup_user="$(pwd)/.gitlab/ci/setup_user.sh"
