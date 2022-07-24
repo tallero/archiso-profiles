@@ -232,9 +232,10 @@ create_ephemeral_codesigning_key() {
 }
 
 run_mkarchiso() {
-  local _build_repo _setup_user
+  local _build_repo _packages _setup_user
   _build_repo="$(pwd)/.gitlab/ci/build_repo.sh src packages.extra"
   _setup_user="$(pwd)/.gitlab/ci/setup_user.sh"
+  source "${profile}/packages.extra"
   # run mkarchiso
   create_ephemeral_pgp_key
   create_ephemeral_codesigning_key
@@ -244,6 +245,8 @@ run_mkarchiso() {
   cp -r "${profile}" /home/user
   chown -R user "/home/user/${profile}"
   su user -c "cd ${profile} && ${_build_repo}"
+  cp "${profile}"/pacman.conf /etc/pacman.conf
+  pacman -Sy "${_packages[@]}"
   mkdir -p "${output}/" "${tmpdir}/"
   print_section_start "mkarchiso" "Running mkarchiso"
   GNUPGHOME="${gnupg_homedir}" mkarchiso \
