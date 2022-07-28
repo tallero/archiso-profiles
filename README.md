@@ -3,7 +3,7 @@
 This repository contain additional 
 [Archiso](https://aur.archlinux.org/archlinux/archiso)
 profiles. It depends on `archiso-persistent-git` 
-([`AUR`](https://aur.archlinux.org/packages/archiso-persistent-git))
+([`AUR`](https://aur.archlinux.org/packages/archiso-encryption-git))
 and `polkit`.
 
 ### Profiles
@@ -52,11 +52,16 @@ Encryption-enabled replica of `releng`:
 
 ### Build
 
-As with any other Archiso profile:
+```console
+git clone https://gitlab.archlinux.org/tallero/archiso-profiles
+make DESTDIR="/" PREFIX=/usr install -C archiso-profiles
+```
+ 
+then as with any other Archiso profile:
 
 ```console
 $ cd archiso-profiles/<profile>
-$ ../.gitlab/ci/build_repo.sh src
+$ mkarchisorepo src
 # mkarchiso -v ./ 
 ```
 
