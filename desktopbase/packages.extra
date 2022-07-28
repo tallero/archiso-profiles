@@ -1,6 +1,6 @@
 _packages=(
     "mkinitcpio-archiso-encryption-git"
-    "cryptsetup-nested-cryptkey"
+    "cryptsetup-sigfile-git"
     "archiso-persistent-git"
     "plymouth-nested-cryptkey"
     "st"
