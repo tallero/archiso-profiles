@@ -39,7 +39,10 @@ _build_repo() {
     # shellcheck disable=SC1091
     source "${_pwd}/${_packages}"
     local _server="/tmp/archiso-profiles/${_profile}"
-    rm -rf repo "${_server}" && mkdir -p repo "${_server}"
+    rm -rf repo "${_server}"
+    mkdir -p repo "${_server}"
+    chown "$(id -u):$(id -g)" "${_server}"
+    chmod 700 "${_server}" 
     cd repo || exit
     gpg --recv-keys "D9B0577BD93E98FC" # cryptsetup
     # shellcheck disable=SC2154
