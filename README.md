@@ -2,9 +2,8 @@
 
 This repository contain additional 
 [Archiso](https://aur.archlinux.org/archlinux/archiso)
-profiles. It depends on `archiso-persistent-git` 
-([`AUR`](https://aur.archlinux.org/packages/archiso-encryption-git))
-and `polkit`.
+profiles. It depends on `archiso-encryption-git` 
+([`AUR`](https://aur.archlinux.org/packages/archiso-encryption-git)).
 
 ### Profiles
 
