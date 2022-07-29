@@ -1,6 +1,6 @@
 base
 cloud-init
-cryptsetup-nested-cryptkey
+cryptsetup-sigfile
 hyperv
 linux
 mkinitcpio
