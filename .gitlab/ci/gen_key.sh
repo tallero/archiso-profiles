@@ -44,7 +44,7 @@ EOF
   )"
 
   # shellcheck disable=SC2034
-  pgp_sender="${_unit} (${_comment}) <${_email}>"
+  export pgp_sender="${_unit} (${_comment}) <${_email}>"
 
 }
 

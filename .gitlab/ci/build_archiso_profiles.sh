@@ -216,6 +216,7 @@ run_mkarchiso() {
   create_ephemeral_keys
   setup_repo
   print_section_start "mkarchiso" "Running mkarchiso"
+  # shellcheck disable=SC2154
   GNUPGHOME="${gnupg_homedir}" mkarchiso \
       -D "${install_dir}" \
       -c "${codesigning_cert} ${codesigning_key}" \
