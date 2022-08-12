@@ -7,7 +7,7 @@ iso_publisher="Arch Linux <https://archlinux.org>"
 iso_application="Arch Linux baseline"
 iso_version="$(date +%Y.%m.%d)"
 install_dir="arch"
-buildmodes=('iso' 'keys')
+buildmodes=('iso' 'dongle')
 bootmodes=('bios.syslinux.mbr'
            'bios.syslinux.eltorito'
 	   'uefi-ia32.grub.esp'
