@@ -38,6 +38,7 @@ _build_pkg() {
 _build_repo() {
     local _mode="${1}"
     local _packages="${2}"
+    local _server="${3}"
     local _profile
     local _pwd
     _pwd=$(pwd)
@@ -45,7 +46,9 @@ _build_repo() {
     # shellcheck source=./packages.extra
     # shellcheck disable=SC1091
     source "${_pwd}/${_packages}"
-    local _server="/tmp/archiso-profiles/${_profile}"
+    if [[ "${_server}" == "" ]]; then
+        _server="/tmp/archiso-profiles/${_profile}"
+    fi
     rm -rf repo "${_server}"
     mkdir -p repo "${_server}"
     chown "$(id -u):$(id -g)" "${_server}"
@@ -61,4 +64,4 @@ _build_repo() {
 }
 
 # mode, packages.extra
-_build_repo "${1}" "${2}"
+_build_repo "${1}" "${2}" "${3}"
