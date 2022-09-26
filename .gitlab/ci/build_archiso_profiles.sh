@@ -174,26 +174,27 @@ create_ephemeral_keys() {
   local _gen_key
   local _gen_key_options=('ephemeral') _gpg_options=() _openssl_options=()
   _gen_key="$(pwd)/.gitlab/ci/gen_key.sh"
+  [ -e "${_gen_key}" ] || _gen_key="mkarchisogenkey"
   print_section_start "ephemeral_pgp_key" "Creating ephemeral PGP key"
   local gnupg_homedir="${tmpdir}/.gnupg"
   signature_info
-  _gpg_options=("${gnupg_homedir}"
-                "${sig_email}"
-                "${sig_unit}"
-                "${sig_comment}")
+  _gpg_options+=("${gnupg_homedir}"
+                 "${sig_email}"
+                 "${sig_unit}"
+                 "${sig_comment}")
   "${_gen_key}" "${_gen_key_options[@]}" 'gpg' "${_gpg_options[@]}"
   create_ephemeral_pgp_key
   print_section_end "ephemeral_pgp_key"
   print_section_start "ephemeral_codesigning_key" "Creating ephemeral codesigning key"
   codesigning_dir="${tmpdir}/.codesigning/"
-  _openssl_options=("${codesigning_dir}"
-                    "${sig_country}"
-                    "${sig_state}"
-                    "${sig_city}"
-                    "${sig_org}"
-                    "${sig_unit}"
-                    "${sig_domain}")
-  "${_gen_key}" "${_gen_key_options[@]} 'openssl' "${_openssl_options[@]}"
+  _openssl_options+=("${codesigning_dir}"
+                     "${sig_country}"
+                     "${sig_state}"
+                     "${sig_city}"
+                     "${sig_org}"
+                     "${sig_unit}"
+                     "${sig_domain}")
+  "${_gen_key}" "${_gen_key_options[@]}" 'openssl' "${_openssl_options[@]}"
   print_section_end "ephemeral_codesigning_key"
 }
 
