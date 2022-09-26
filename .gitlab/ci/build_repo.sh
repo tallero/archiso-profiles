@@ -4,7 +4,14 @@ unset mode
 
 _makepkg() {
     local _pkgname="${1}"
-    git clone "https://aur.archlinux.org/${_pkgname}"
+    local _repo="${2}"
+    local _user="${3}"
+    if [[ "${_repo}" == "" ]] || [[ "${_repo}" == "aur" ]] ; then
+        _url="https://aur.archlinux.org"
+    elif [ "${_repo}" == "archlinux" ]; then
+        _url="https://gitlab.archlinux.org/${_user}/${_pkgname}-aur"
+    fi
+    git clone "${_url}/${_pkgname}"
     cd "${_pkgname}" || exit
     makepkg
     mv "${_pkgname}"*".pkg.tar."* "${_server}"

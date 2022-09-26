@@ -2,22 +2,35 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-# NOTE: most functionality (apart from building) is abstracted by this include
-include:
-  - project: 'archlinux/ci-scripts'
-    ref: master
-    file: '/prepare_archiso_vm.yml'
-
-variables:
-  BUILD_SCRIPT: ./.gitlab/ci/build_archiso_profiles.sh
-  PACKAGE_LIST: base-devel cryptsetup docbook-xsl dosfstools e2fsprogs erofs-utils git jq libisoburn mtools openssl pango qemu-headless shellcheck shfmt squashfs-tools zsync
-  QEMU_BUILD_TIMEOUT: 2400
-  QEMU_COPY_ARTIFACTS_TIMEOUT: 120
-  QEMU_VM_MEMORY: 3072
-  ARCHISO_COW_SPACE_SIZE: 2g
-
 stages:
+  - check
   - build
+
+check:
+  before_script:
+    # NOTE: Install latest archlinux-keyring before upgrading system. In the
+    # future this should not be needed anymore when we can guarantee a valid
+    # keyring for longer:
+    # https://gitlab.archlinux.org/archlinux/archlinux-keyring/-/issues/4
+    - pacman -Sy --needed --noconfirm archlinux-keyring
+    - pacman --noconfirm -Syu --needed make shellcheck
+  script:
+    - make check
+  stage: check
+  interruptible: true
+
+.build:
+  artifacts:
+    reports:
+      metrics: output/metrics.txt
+  before_script:
+    - pacman -Sy --needed --noconfirm archlinux-keyring
+    - pacman -Syu --needed --noconfirm arch-install-scripts bash dosfstools e2fsprogs erofs-utils gnupg grub jq libarchive libisoburn mtools openssl qemu-headless squashfs-tools zsync
+  script:
+    - ./.gitlab/ci/build_archiso.sh ${BUILD_SCRIPT_ARGS}
+  stage: build
+  tags:
+    - vm
 
 build_short:
   extends: .build
