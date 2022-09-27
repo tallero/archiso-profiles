@@ -199,22 +199,33 @@ create_ephemeral_keys() {
 }
 
 setup_repo() {
-  local _build_repo _build_repo_options=() _packages _setup_user
+  local _build_repo _build_repo_options=() _packages _repo _server _setup_user
+  local _server="/tmp/archiso-profiles/${profile}"
   local _build_repo_options=('src'
                              'packages.extra'
-			     "/tmp/archiso-profiles/${profile}")
+			     "${_server}")
   _build_repo="$(pwd)/.gitlab/ci/build_repo.sh"
   _setup_user="$(pwd)/.gitlab/ci/setup_user.sh"
   [ -e "${_build_repo}" ] || _build_repo="mkarchisorepo"
   print_section_start "setup_repo" "Setup ${profile} ${buildmode} additional packages"
   "${_setup_user}"
-  cp -r "${profile}" /home/user
-  chown -R user "/home/user/${profile}"
-  su user -c "cd ${profile} && ${_build_repo} ${_build_repo_options[@]}"
-  #shellcheck disable=SC1091
   source "${profile}/packages.extra"
-  cp "${profile}"/pacman.conf /etc/pacman.conf
-  pacman -Sy "${_packages[@]}"
+  if [[ "${_packages[*]}" != "" ]] ; then
+      cp -r "${profile}" /home/user
+      chown -R user "/home/user/${profile}"
+      su user -c "cd ${profile} && ${_build_repo} ${_build_repo_options[@]}"
+      #shellcheck disable=SC1091
+      source "${profile}/packages.extra"
+      _repo=("[${profile}]"
+              "SigLevel = Optional TrustAll"
+              "Server = file://${_server}")
+      if ! grep -q "\[${profile}\]" "${profile}/pacman.conf"; then
+          for _line in "${_repo[@]}"; do
+              sed -i "/\[core\]/i ${_line}" pacman.conf
+          done
+      fi
+      pacman --config "${profile}/pacman.conf" -Sy "${_packages[@]}"
+      fi
   print_section_end "setup_repo"
 }
 
