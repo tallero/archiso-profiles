@@ -7,12 +7,15 @@ profiles. It depends on `archiso-encryption-git`
 
 ### Profiles
 
+All the included profiles are such that when put on a writable medium
+they become functional portable systems.
+
 #### `ebaseline` <br> <sub>*`archlinux-ebaseline`* ([`AUR`](https://aur.archlinux.org/packages/archlinux-ebaseline))</sub>
 Encryption-enabled replica of `baseline`:
 ```yaml
 - airootfs_image_type: "erofs+luks";
 - keys_image_type: "squashfs+luks";
-- buildmodes: "iso" and "keys";
+- buildmodes: "iso" and "dongle";
 - cryptsetup-luks-cryptkey: replaces "cryptsetup";
 - mkinitcpio-archiso-encryption: replaces "mkinitcpio-archiso";
 ```
