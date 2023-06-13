@@ -30,6 +30,7 @@ dongle_persistent_encryption_key="auto"
 swap_image_type="swap+luks"
 swap_size="2000000" # 2GB
 dongle_swap_size="2000000" # 2GB
+recovery="true"
 file_permissions=(
   ["/etc/shadow"]="0:0:400"
   ["/run/archiso/keys"]="0:0:700"
