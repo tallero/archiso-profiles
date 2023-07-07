@@ -24,8 +24,25 @@ check:
     reports:
       metrics: output/metrics.txt
   before_script:
-    - pacman -Sy --needed --noconfirm archlinux-keyring
-    - pacman -Syu --needed --noconfirm arch-install-scripts bash dosfstools e2fsprogs erofs-utils gnupg grub jq libarchive libisoburn mtools openssl qemu-headless squashfs-tools zsync
+    - >
+      pacman -Sy --needed --noconfirm archlinux-keyring
+
+    - >
+      pacman -Syu --needed --noconfirm arch-install-scripts
+      bash
+      dosfstools
+      e2fsprogs
+      erofs-utils
+      gnupg
+      grub
+      jq
+      libarchive
+      libisoburn
+      mtools
+      openssl
+      qemu-headless
+      squashfs-tools
+      zsync
   script:
     - ./.gitlab/ci/build_archiso.sh ${BUILD_SCRIPT_ARGS}
   stage: build
