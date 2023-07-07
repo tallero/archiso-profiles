@@ -1,0 +1,9 @@
+[Unit]
+Description=Dongle persistent partition automount
+
+[Automount]
+Where=/run/archiso/donglepersistent
+TimeoutIdleSec=3min
+
+[Install]
+WantedBy=multi-user.target

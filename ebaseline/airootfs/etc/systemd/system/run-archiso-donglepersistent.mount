@@ -1,0 +1,13 @@
+[Unit]
+Description=Dongle persistent mount
+JobTimeoutSec=30
+
+[Mount]
+What=/dev/mapper/donglepersistent
+Where=/run/archiso/donglepersistent
+Type=ext4
+Options=rw,noatime,nofail
+TimeoutSec=5
+
+[Install]
+WantedBy=multi-user.target

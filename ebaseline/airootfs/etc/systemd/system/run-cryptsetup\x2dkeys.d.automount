@@ -1,0 +1,9 @@
+[Unit]
+Description=Keys directory bind automount
+
+[Automount]
+Where=/run/cryptsetup-keys.d
+TimeoutIdleSec=3min
+
+[Install]
+WantedBy=multi-user.target

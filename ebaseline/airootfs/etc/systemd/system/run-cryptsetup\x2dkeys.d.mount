@@ -1,0 +1,14 @@
+[Unit]
+Description=Keys bind yount
+# RequiresMountsFor=/run/archiso/donglepersistent
+
+[Mount]
+What=/run/archiso/donglepersistent/etc/cryptsetup-keys.d
+Where=/run/cryptsetup-keys.d
+Type=None
+Options=bind,nofail
+DirectoryMode=0700
+TimeoutSec=5
+
+[Install]
+WantedBy=multi-user.target

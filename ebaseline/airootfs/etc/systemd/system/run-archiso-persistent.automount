@@ -1,0 +1,9 @@
+[Unit]
+Description=Persistent partition automount
+
+[Automount]
+Where=/run/archiso/persistent
+TimeoutIdleSec=3min
+
+[Install]
+WantedBy=multi-user.target

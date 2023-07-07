@@ -1,0 +1,13 @@
+[Unit]
+Description=Persistent mount
+
+[Mount]
+What=/dev/mapper/persistent
+Where=/run/archiso/persistent
+Type=ext4
+Options=rw,noatime,nofail
+DirectoryMode=0711
+TimeoutSec=5
+
+[Install]
+WantedBy=multi-user.target
