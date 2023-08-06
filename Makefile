@@ -7,7 +7,7 @@ LIB_DIR=$(DESTDIR)$(PREFIX)/lib/archiso
 DOC_DIR=$(DESTDIR)$(PREFIX)/share/doc/archiso
 PROFILE_DIR=$(DESTDIR)$(PREFIX)/share/archiso
 
-PROFILES=desktop desktopbase ebaseline ereleng
+PROFILES=desktop desktopbase ebaseline ereleng life
 DOC_FILES=$(wildcard docs/*) $(wildcard *.md)
 SCRIPT_FILES=$(wildcard archiso/*) $(wildcard scripts/*.sh) $(wildcard .gitlab/ci/*.sh) \
              $(wildcard */profiledef.sh) $(wildcard */packages.extra) \

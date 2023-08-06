@@ -16,7 +16,7 @@ Encryption-enabled replica of `baseline`:
 - airootfs_image_type: "erofs+luks";
 - keys_image_type: "squashfs+luks";
 - buildmodes: "iso" and "dongle";
-- cryptsetup-luks-cryptkey: replaces "cryptsetup";
+- cryptsetup-sigfile: replaces "cryptsetup";
 - mkinitcpio-archiso-encryption: replaces "mkinitcpio-archiso";
 ```
 
@@ -29,7 +29,7 @@ Base desktops based on `ebaseline` without apps. Same options as `desktop`.
 ```
 
 #### `desktop` <br> <sub>*`archlinux-desktop`* ([`AUR`](https://aur.archlinux.org/packages/archlinux-desktop))</sub>
-Desktop profile based on `desktopbase`.
+Desktop profile based on `desktopbase` including common productivity apps.
 
 ##### Apps
 - Abiword
@@ -47,6 +47,18 @@ Encryption-enabled replica of `releng`:
 - keys_image_type: "erofs+luks";
 - buildmodes: "iso" and "keys"
 - cryptsetup-luks-cryptkey: replaces "cryptsetup"
+- mkinitcpio-archiso-encryption: replaces "mkinitcpio-archiso"
+```
+
+#### `life` <br> <sub>*`life`* ([`AUR`](https://aur.archlinux.org/packages/life))</sub>
+
+A desktop profile with a focus on security, development and user-experience.
+
+```yaml
+- airootfs_image_type: "squashfs+luks"
+- keys_image_type: "erofs+luks";
+- buildmodes: "iso" and "keys"
+- cryptsetup-sigfile: replaces "cryptsetup"
 - mkinitcpio-archiso-encryption: replaces "mkinitcpio-archiso"
 ```
 
