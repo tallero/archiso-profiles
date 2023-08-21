@@ -4,6 +4,7 @@ cloud-init
 cryptsetup-nested-cryptkey
 evolution
 hyperv
+# fbv
 firewalld
 gnumeric
 gedit
@@ -19,6 +20,7 @@ firefox
 kdenlive
 nautilus-terminal
 linux
+libcaca
 mkinitcpio
 mkinitcpio-archiso-encryption
 mpv
